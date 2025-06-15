@@ -85,7 +85,7 @@ export const weddingData = {
       approved: true
     }
   ],
-   // 新增Supabase配置
+   // Supabase配置 - 从环境变量读取
   supabaseConfig: {
     tableName: "guests",
     schema: `
@@ -115,8 +115,8 @@ export const weddingData = {
       CREATE POLICY "Read access" ON guests
         FOR SELECT USING (true);
     `,
-    apiEndpoint: "https://your-project.supabase.co",
-    apiKey: "your-anon-key"
+    apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co",
+    apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key"
   },
   
   // 高德地图配置
