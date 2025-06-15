@@ -28,6 +28,7 @@ export default function App() {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/invitation" element={<Invitation />} />
         <Route path="/guest" element={<GuestPage />} />
+        <Route path="/guest/:name-invite" element={<GuestPage />} />
         <Route path="/admin/comments" element={<AdminComments />} />
         <Route path="/wishes" element={<GuestPage />} />
       </Routes>

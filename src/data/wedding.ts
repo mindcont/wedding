@@ -1,15 +1,15 @@
 export const weddingData = {
   coupleName: "张正轩 & 李梦",
-  weddingDate: "2025年10月1日",
+  weddingDate: "2025年6月28日",
   weddingDetails: {
     date: "2025年6月28日",
     time: "12点",
-    location: "青岛瑞吉酒店",
-    address: "山东省青岛市市南区香港中路48号"
+    location: "山东.郓城.丽都大酒店",
+    address: "山东省郓城县西门街丽都大酒店",
   },
   mapData: {
-    lat: 36.06623,
-    lng: 120.384428,
+    lat: 35.61,
+    lng: 115.95,
     marker: {
       icon: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=%E5%A9%9A%E7%A4%BC%E5%9C%B0%E7%82%B9%E6%A0%87%E8%AE%B0%EF%BC%8C%E7%B2%89%E8%89%B2%E5%BF%83%E5%BD%A2%EF%BC%8C%E7%AE%80%E7%BA%A6%E6%B8%85%E6%96%B0%E9%A3%8E%E6%A0%BC&sign=997c8d874089ac47cdd534f458374d7a"
     }
