@@ -88,26 +88,43 @@ export default function Home() {
     if (!messagesContainerRef.current || messages.length <= 3) return;
 
     const container = messagesContainerRef.current;
-    const scrollWidth = container.scrollWidth - container.clientWidth;
+    const scrollHeight = container.scrollHeight - container.clientHeight;
     let scrollPosition = 0;
-    let direction = 1;
+    let scrollDirection = 1;
+    let isScrolling = true;
 
-    const scrollInterval = setInterval(() => {
-      scrollPosition += direction * 0.5; // 调整滚动速度
-
-      if (scrollPosition >= scrollWidth) {
-        direction = -1;
+    const scrollMessages = () => {
+      if (!isScrolling) return;
+      
+      scrollPosition += scrollDirection * 0.5;
+      
+      if (scrollPosition >= scrollHeight) {
+        // 滚动到底部后暂停2秒
+        isScrolling = false;
+        setTimeout(() => {
+          isScrolling = true;
+          scrollDirection = -1;
+        }, 2000);
       } else if (scrollPosition <= 0) {
-        direction = 1;
+        // 滚动到顶部后暂停2秒
+        isScrolling = false;
+        setTimeout(() => {
+          isScrolling = true;
+          scrollDirection = 1;
+        }, 2000);
       }
 
       container.scrollTo({
-        left: scrollPosition,
+        top: scrollPosition,
         behavior: 'smooth'
       });
-    }, 50);
 
-    return () => clearInterval(scrollInterval);
+      requestAnimationFrame(scrollMessages);
+    };
+
+    const scrollInterval = requestAnimationFrame(scrollMessages);
+    
+    return () => cancelAnimationFrame(scrollInterval);
   }, [messages]);
 
   return (
@@ -139,13 +156,15 @@ export default function Home() {
           <h3 className="text-lg font-medium mb-2">祝福留言</h3>
           <div 
             ref={messagesContainerRef}
-            className="flex overflow-x-auto space-x-4 py-2 scrollbar-hide"
+            className="overflow-y-auto max-h-60 space-y-3 scrollbar-hide"
           >
             {messages.map((message) => (
               <motion.div
                 key={message.id}
-                className="flex-shrink-0 bg-white rounded-lg p-3 shadow-sm w-64"
-                whileHover={{ scale: 1.02 }}
+                className="bg-white rounded-lg p-3 shadow-sm"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
               >
                 <div className="flex items-start">
                   <span className="text-2xl mr-2">{message.emoji || '❤️'}</span>
