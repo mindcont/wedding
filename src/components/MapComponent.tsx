@@ -41,12 +41,6 @@ export default function MapComponent({
         map.addControl(new AMap.ToolBar());
         map.addControl(new AMap.Scale());
 
-        // 添加标记点
-        new AMap.Marker({
-          position: new AMap.LngLat(...markerPosition),
-          map: map,
-          icon: markerIcon
-        });
 
         setMapLoaded(true);
       } catch (error) {
