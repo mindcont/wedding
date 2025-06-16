@@ -28,11 +28,5 @@
         "Cache-Control": "public, max-age=0, must-revalidate"
       }
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/:path*",
-      "destination": "/static/:path*"
-    }
   ]
 }
