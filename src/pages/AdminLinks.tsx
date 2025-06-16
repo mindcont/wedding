@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { weddingData } from "@/data/wedding";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { createClient } from '@supabase/supabase-js';
@@ -8,16 +8,45 @@ import { AuthContext } from "@/App";
 
 export default function AdminLinks() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useContext(AuthContext);
   const [links, setLinks] = useState<{name: string; tableNumber?: string; link: string}[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // 如果未认证，重定向到首页
+    if (!isAuthenticated) {
+      toast.error('请先登录管理员账户');
+      navigate("/");
+      return;
+    }
     const fetchLinks = async () => {
       try {
-        const data = await weddingData.supabaseConfig.getAllGuestLinks();
-        setLinks(data);
-      } catch (error) {
-        console.error('Error fetching links:', error);
+        // 初始化Supabase客户端
+        const supabase = createClient(
+          weddingData.supabaseConfig.apiEndpoint,
+          weddingData.supabaseConfig.apiKey
+        );
+        
+        // 直接查询数据库
+        const { data, error: queryError } = await supabase
+          .from('guests')
+          .select('name, table_number');
+        
+        if (queryError) throw queryError;
+        
+        // 格式化数据
+        const formattedData = data?.map(guest => ({
+          name: guest.name,
+          tableNumber: guest.table_number,
+          link: `/guest/${encodeURIComponent(guest.name)}-invite`
+        })) || [];
+        
+        setLinks(formattedData);
+        setError(null);
+      } catch (err) {
+        console.error('获取链接失败:', err);
+        setError('无法获取宾客链接，请检查网络连接或数据库配置');
         toast.error('获取链接失败');
       } finally {
         setLoading(false);
@@ -66,12 +95,24 @@ export default function AdminLinks() {
           宾客邀请链接管理
         </motion.h1>
 
+        {/* 错误提示 */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded"
+          >
+            <p>{error}</p>
+          </motion.div>
+        )}
+
         {/* 链接列表 */}
         {loading ? (
-          <div className="flex justify-center items-center h-64">
+          <div className="flex flex-col items-center justify-center h-64 space-y-4">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-300"></div>
+            <p>正在加载宾客链接...</p>
           </div>
-        ) : (
+        ) : links.length > 0 ? (
           <div className="space-y-4">
             {links.map((item) => (
               <motion.div
@@ -104,6 +145,10 @@ export default function AdminLinks() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        ) : (
+          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded">
+            <p>暂无宾客数据</p>
           </div>
         )}
       </div>

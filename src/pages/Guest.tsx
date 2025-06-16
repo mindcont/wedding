@@ -1,8 +1,9 @@
 import { weddingData } from "@/data/wedding";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { Empty } from "@/components/Empty";
 import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { createClient } from '@supabase/supabase-js';
 
 export default function GuestPage() {
@@ -10,6 +11,12 @@ export default function GuestPage() {
   const { name } = useParams();
   const [guest, setGuest] = useState<{name: string; table_number?: string} | null>(null);
   const [loading, setLoading] = useState(true);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [newMessage, setNewMessage] = useState({
+    name: '',
+    content: '',
+    emoji: '❤️'
+  });
 
   useEffect(() => {
     const fetchGuest = async () => {
@@ -42,6 +49,18 @@ export default function GuestPage() {
     };
 
     fetchGuest();
+    
+    // 获取留言
+    const fetchMessages = async () => {
+      try {
+        const data = await weddingData.supabaseConfig.getMessages();
+        setMessages(data);
+      } catch (error) {
+        console.error('获取留言失败:', error);
+      }
+    };
+    
+    fetchMessages();
   }, [name]);
 
   return (
@@ -97,20 +116,104 @@ export default function GuestPage() {
             </p>
           )}
           
-          <div className="mt-8">
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="overflow-hidden rounded-lg shadow-md"
-            >
-              <img
-                src={weddingData.featuredPhoto.url}
-                alt={weddingData.featuredPhoto.alt}
-                className="w-full h-auto object-cover rounded-lg"
-                style={{ aspectRatio: "3/4" }}
-              />
-            </motion.div>
-            <p className="mt-4 text-gray-600">张明 & 李雪</p>
-          </div>
+           {/* 留言表单 */}
+           <div className="mt-8 w-full">
+             <div className="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-6">
+               <h3 className="text-xl font-medium mb-4">留下您的祝福</h3>
+               <div className="space-y-4">
+                 <input
+                   type="text"
+                   placeholder="您的姓名"
+                   className="w-full px-4 py-2 border rounded-lg"
+                   value={newMessage.name}
+                   onChange={(e) => setNewMessage({...newMessage, name: e.target.value})}
+                 />
+                 <textarea
+                   placeholder="祝福内容"
+                   className="w-full px-4 py-2 border rounded-lg"
+                   rows={3}
+                   value={newMessage.content}
+                   onChange={(e) => setNewMessage({...newMessage, content: e.target.value})}
+                 />
+                 <div className="flex items-center space-x-2">
+                   <span className="text-2xl">{newMessage.emoji}</span>
+                   <select 
+                     className="px-3 py-1 border rounded-lg"
+                     value={newMessage.emoji}
+                     onChange={(e) => setNewMessage({...newMessage, emoji: e.target.value})}
+                   >
+                     <option value="❤️">❤️ 爱心</option>
+                     <option value="😊">😊 微笑</option>
+                     <option value="🎉">🎉 庆祝</option>
+                     <option value="💐">💐 鲜花</option>
+                     <option value="🥂">🥂 干杯</option>
+                   </select>
+                 </div>
+                 <button
+                   onClick={async () => {
+                     if (!newMessage.name || !newMessage.content) {
+                       toast.error('请填写姓名和留言内容');
+                       return;
+                     }
+                     try {
+                       await weddingData.supabaseConfig.addMessage(
+                         newMessage.name,
+                         newMessage.content,
+                         newMessage.emoji
+                       );
+                       toast.success('留言已提交');
+                       setNewMessage({name: '', content: '', emoji: '❤️'});
+                       const data = await weddingData.supabaseConfig.getMessages();
+                       setMessages(data);
+                     } catch (error) {
+                       toast.error('留言提交失败');
+                     }
+                   }}
+                   className="w-full py-2 px-4 bg-pink-300 hover:bg-pink-400 text-white rounded-lg transition-colors"
+                 >
+                   提交留言
+                 </button>
+               </div>
+             </div>
+             
+             {/* 留言列表 */}
+             {messages.length > 0 && (
+               <div className="bg-white bg-opacity-80 rounded-lg shadow-md p-6">
+                 <h3 className="text-xl font-medium mb-4">祝福留言</h3>
+                 <div className="space-y-4">
+                   {messages.map((message) => (
+                     <div key={message.id} className="border-b pb-4 last:border-0">
+                       <div className="flex items-start">
+                         <span className="text-2xl mr-2">{message.emoji}</span>
+                         <div>
+                           <p className="font-medium">{message.name}</p>
+                           <p className="text-gray-700">{message.content}</p>
+                           <p className="text-xs text-gray-500 mt-1">
+                             {new Date(message.created_at).toLocaleString('zh-CN')}
+                           </p>
+                         </div>
+                       </div>
+                     </div>
+                   ))}
+                 </div>
+               </div>
+             )}
+           </div>
+           
+           <div className="mt-8">
+             <motion.div 
+               whileHover={{ scale: 1.02 }}
+               className="overflow-hidden rounded-lg shadow-md"
+             >
+               <img
+                 src={weddingData.featuredPhoto.url}
+                 alt={weddingData.featuredPhoto.alt}
+                 className="w-full h-auto object-cover rounded-lg"
+                 style={{ aspectRatio: "3/4" }}
+               />
+             </motion.div>
+             <p className="mt-4 text-gray-600">张明 & 李雪</p>
+           </div>
         </motion.div>
       </div>
     </div>

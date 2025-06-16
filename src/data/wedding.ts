@@ -1,3 +1,5 @@
+import { createClient } from '@supabase/supabase-js';
+
 export const weddingData = {
   coupleName: "张正轩 & 李梦",
   weddingDate: "2025年6月28日",
@@ -129,8 +131,8 @@ export const weddingData = {
       CREATE POLICY "Insert access visitors" ON visitors
         FOR INSERT WITH CHECK (true);
     `,
-    apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://sdukxulzgoihfjpddelt.supabase.co",
-    apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkdWt4dWx6Z29paGZqcGRkZWx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NDk1OTQsImV4cCI6MjA2NTUyNTU5NH0.yIAvLqHRxJijoH_WXJhOc7Bn3MRaqr0aI5SBhsAEpLw",
+    apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co",
+    apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key",
     // 记录访客信息
     recordVisitor: async (ip: string, userAgent: string) => {
       const supabase = createClient(
@@ -179,14 +181,41 @@ export const weddingData = {
         tableNumber: guest.table_number,
         link: `/guest/${encodeURIComponent(guest.name)}-invite`
       })) || [];
+    },
+    
+    // 获取留言
+    getMessages: async () => {
+      const supabase = createClient(
+        weddingData.supabaseConfig.apiEndpoint,
+        weddingData.supabaseConfig.apiKey
+      );
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
+    },
+    
+    // 添加留言
+    addMessage: async (name: string, content: string, emoji?: string) => {
+      const supabase = createClient(
+        weddingData.supabaseConfig.apiEndpoint,
+        weddingData.supabaseConfig.apiKey
+      );
+      const { data, error } = await supabase
+        .from('messages')
+        .insert({ name, content, emoji });
+      
+      if (error) throw error;
+      return data;
     }
-
-
   },
   
   // 高德地图配置
   amapConfig: {
-    key: "fb816786e7600306aa62ca9e0dc166f3",
+    key: "您的高德地图key",
     version: "2.0",
     plugins: ["AMap.Scale", "AMap.ToolBar", "AMap.HawkEye", "AMap.ControlBar"],
     center: [120.384428, 36.06623], // 青岛瑞吉酒店坐标
