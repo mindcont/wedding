@@ -97,7 +97,7 @@ export default function GuestPage() {
             className="text-4xl md:text-5xl font-bold mb-8"
             style={{ fontFamily: "'Great Vibes', cursive" }}
           >
-            {guest ? `尊敬的${guest.name}` : '尊敬的宾客'}
+            {guest ? `尊敬的 ${guest.name}` : '尊敬的宾客'}
           </h1>
           
           <p 
@@ -105,8 +105,8 @@ export default function GuestPage() {
             style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300 }}
           >
             {guest ? 
-              `感谢您${guest.name}来见证我们的幸福时刻！` : 
-              '感谢您来见证我们的幸福时刻！'
+              `邀请您来见证我们的幸福时刻！` : 
+              '邀请您来见证我们的幸福时刻！'
             }
           </p>
 
@@ -200,20 +200,7 @@ export default function GuestPage() {
              )}
            </div>
            
-           <div className="mt-8">
-             <motion.div 
-               whileHover={{ scale: 1.02 }}
-               className="overflow-hidden rounded-lg shadow-md"
-             >
-               <img
-                 src={weddingData.featuredPhoto.url}
-                 alt={weddingData.featuredPhoto.alt}
-                 className="w-full h-auto object-cover rounded-lg"
-                 style={{ aspectRatio: "3/4" }}
-               />
-             </motion.div>
-             <p className="mt-4 text-gray-600">张明 & 李雪</p>
-           </div>
+   
         </motion.div>
       </div>
     </div>
