@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
 import { weddingData } from "@/data/wedding";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createClient } from '@supabase/supabase-js';
 
 
 export default function Home() {
   const navigate = useNavigate();
   const [visitors, setVisitors] = useState<{ip_address: string; visit_time: string}[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchRecentVisitors = async () => {
@@ -64,11 +66,49 @@ export default function Home() {
       }
     };
 
+    const fetchMessages = async () => {
+      try {
+        const data = await weddingData.supabaseConfig.getApprovedMessages();
+        setMessages(data);
+      } catch (error) {
+        console.error('获取留言失败:', error);
+      }
+    };
+
     // 先获取现有访客记录
     fetchRecentVisitors();
     // 然后记录新访客
     recordVisitor();
+    // 获取留言
+    fetchMessages();
   }, []);
+
+  // 自动滚动效果
+  useEffect(() => {
+    if (!messagesContainerRef.current || messages.length <= 3) return;
+
+    const container = messagesContainerRef.current;
+    const scrollWidth = container.scrollWidth - container.clientWidth;
+    let scrollPosition = 0;
+    let direction = 1;
+
+    const scrollInterval = setInterval(() => {
+      scrollPosition += direction * 0.5; // 调整滚动速度
+
+      if (scrollPosition >= scrollWidth) {
+        direction = -1;
+      } else if (scrollPosition <= 0) {
+        direction = 1;
+      }
+
+      container.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+    }, 50);
+
+    return () => clearInterval(scrollInterval);
+  }, [messages]);
 
   return (
     <div className="min-h-screen bg-[#F8E0E0] flex flex-col items-center justify-between p-8">
@@ -92,6 +132,41 @@ export default function Home() {
           {weddingData.weddingDate}
         </p>
       </div>
+
+      {/* 留言滚动区域 */}
+      {messages.length > 0 && (
+        <div className="w-full max-w-md mb-4 bg-white bg-opacity-80 rounded-lg shadow-md p-4">
+          <h3 className="text-lg font-medium mb-2">祝福留言</h3>
+          <div 
+            ref={messagesContainerRef}
+            className="flex overflow-x-auto space-x-4 py-2 scrollbar-hide"
+          >
+            {messages.map((message) => (
+              <motion.div
+                key={message.id}
+                className="flex-shrink-0 bg-white rounded-lg p-3 shadow-sm w-64"
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="flex items-start">
+                  <span className="text-2xl mr-2">{message.emoji || '❤️'}</span>
+                  <div>
+                    <p className="font-medium">{message.name}</p>
+                    <p className="text-gray-700 text-sm">{message.content}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {new Date(message.created_at).toLocaleString('zh-CN', {
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="w-full max-w-md mb-8">
         {weddingData.navItems.map((item) => (
