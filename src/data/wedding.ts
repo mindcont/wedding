@@ -129,8 +129,8 @@ export const weddingData = {
       CREATE POLICY "Insert access visitors" ON visitors
         FOR INSERT WITH CHECK (true);
     `,
-    apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co",
-    apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key",
+    apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://sdukxulzgoihfjpddelt.supabase.co",
+    apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkdWt4dWx6Z29paGZqcGRkZWx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NDk1OTQsImV4cCI6MjA2NTUyNTU5NH0.yIAvLqHRxJijoH_WXJhOc7Bn3MRaqr0aI5SBhsAEpLw",
     // 记录访客信息
     recordVisitor: async (ip: string, userAgent: string) => {
       const supabase = createClient(
