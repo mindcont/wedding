@@ -4,6 +4,7 @@ import Gallery from "@/pages/Gallery";
 import Invitation from "@/pages/Invitation";
 import GuestPage from "@/pages/Guest";
 import AdminComments from "@/pages/AdminComments";
+import AdminLinks from "@/pages/AdminLinks";
 import { createContext, useState } from "react";
 
 export const AuthContext = createContext({
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/guest" element={<GuestPage />} />
         <Route path="/guest/:name-invite" element={<GuestPage />} />
         <Route path="/admin/comments" element={<AdminComments />} />
+        <Route path="/admin/links" element={<AdminLinks />} />
         <Route path="/wishes" element={<GuestPage />} />
       </Routes>
     </AuthContext.Provider>

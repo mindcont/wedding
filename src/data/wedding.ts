@@ -85,7 +85,7 @@ export const weddingData = {
       approved: true
     }
   ],
-   // Supabase配置 - 从环境变量读取
+  // Supabase配置 - 从环境变量读取
   supabaseConfig: {
     tableName: "guests",
     schema: `
@@ -100,25 +100,87 @@ export const weddingData = {
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
       );
       
+      CREATE TABLE visitors (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        ip_address TEXT NOT NULL,
+        visit_time TIMESTAMP WITH TIME ZONE DEFAULT now(),
+        user_agent TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+      );
+      
       -- 创建索引
       CREATE INDEX idx_guests_name ON guests(name);
       CREATE INDEX idx_guests_phone ON guests(phone);
+      CREATE INDEX idx_visitors_time ON visitors(visit_time);
       
       -- RLS策略
       ALTER TABLE guests ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE visitors ENABLE ROW LEVEL SECURITY;
       
       -- 管理员可以完全访问
-      CREATE POLICY "Admin access" ON guests
+      CREATE POLICY "Admin access guests" ON guests
+        FOR ALL USING (auth.role() = 'admin');
+      CREATE POLICY "Admin access visitors" ON visitors
         FOR ALL USING (auth.role() = 'admin');
       
       -- 其他角色只能读取
-      CREATE POLICY "Read access" ON guests
+      CREATE POLICY "Read access guests" ON guests
         FOR SELECT USING (true);
+      CREATE POLICY "Insert access visitors" ON visitors
+        FOR INSERT WITH CHECK (true);
     `,
     apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co",
     apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key",
+    // 记录访客信息
+    recordVisitor: async (ip: string, userAgent: string) => {
+      const supabase = createClient(
+        weddingData.supabaseConfig.apiEndpoint,
+        weddingData.supabaseConfig.apiKey
+      );
+      const { error } = await supabase
+        .from('visitors')
+        .insert({ ip_address: ip, user_agent: userAgent });
+      
+      if (error) console.error('记录访客失败:', error);
+    },
+    // 获取最近访客
+    getRecentVisitors: async (limit = 5) => {
+      const supabase = createClient(
+        weddingData.supabaseConfig.apiEndpoint,
+        weddingData.supabaseConfig.apiKey
+      );
+      const { data, error } = await supabase
+        .from('visitors')
+        .select('ip_address, visit_time')
+        .order('visit_time', { ascending: false })
+        .limit(limit);
+      
+      if (error) {
+        console.error('获取访客记录失败:', error);
+        return [];
+      }
+      return data || [];
+    },
     // 生成个性化邀请链接的函数
-    generateInviteLink: (name: string) => `/guest/${encodeURIComponent(name)}-invite`
+    generateInviteLink: (name: string) => `/guest/${encodeURIComponent(name)}-invite`,
+    getAllGuestLinks: async () => {
+      const supabase = createClient(
+        weddingData.supabaseConfig.apiEndpoint,
+        weddingData.supabaseConfig.apiKey
+      );
+      const { data, error } = await supabase
+        .from('guests')
+        .select('name, table_number');
+      
+      if (error) throw error;
+      
+      return data?.map(guest => ({
+        name: guest.name,
+        tableNumber: guest.table_number,
+        link: `/guest/${encodeURIComponent(guest.name)}-invite`
+      })) || [];
+    }
+
 
   },
   
@@ -126,8 +188,11 @@ export const weddingData = {
   amapConfig: {
     key: "fb816786e7600306aa62ca9e0dc166f3",
     version: "2.0",
-    plugins: ["AMap.Scale", "AMap.ToolBar"],
-    center: [115.95, 35.61], // 山东.郓城.丽都大酒店坐标
-    zoom: 15
+    plugins: ["AMap.Scale", "AMap.ToolBar", "AMap.HawkEye", "AMap.ControlBar"],
+    center: [120.384428, 36.06623], // 青岛瑞吉酒店坐标
+    zoom: 15,
+    minZoom: 10,
+    maxZoom: 18
   }
+
 };
