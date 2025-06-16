@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { weddingData } from "@/data/wedding";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { createClient } from '@supabase/supabase-js';
+
 
 export default function Home() {
   const navigate = useNavigate();
@@ -11,20 +13,35 @@ export default function Home() {
   useEffect(() => {
     // 获取访客IP并记录
     const recordVisitor = async () => {
-      try {
+    try {
         // 获取访客IP
         const response = await fetch('https://api.ipify.org?format=json');
         const data = await response.json();
         const ip = data.ip;
         
-        // 记录访客信息
-        await weddingData.supabaseConfig.recordVisitor(
-          ip,
-          navigator.userAgent
+        // 使用统一的Supabase配置记录访客
+        const supabase = createClient(
+          weddingData.supabaseConfig.apiEndpoint,
+          weddingData.supabaseConfig.apiKey
         );
         
+        const { error } = await supabase
+          .from('visitors')
+          .insert({ 
+            ip_address: ip, 
+            user_agent: navigator.userAgent 
+          });
+          
+        if (error) throw error;
+
+        
         // 获取最近访客记录
-        const recentVisitors = await weddingData.supabaseConfig.getRecentVisitors();
+        const { data: recentVisitors } = await supabase
+          .from('visitors')
+          .select('ip_address, visit_time')
+          .order('visit_time', { ascending: false })
+          .limit(5);
+
         setVisitors(recentVisitors);
       } catch (error) {
         console.error('访客记录错误:', error);
