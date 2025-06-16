@@ -1,33 +1,21 @@
 import { useState, useEffect, useContext } from "react";
 import { weddingData } from "@/data/wedding";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { createClient } from '@supabase/supabase-js';
 import { AuthContext } from "@/App";
 
 export default function AdminComments() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, supabaseClient } = useContext(AuthContext);
   const [comments, setComments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      toast.error('请先登录管理员账户');
-      navigate("/");
-      return;
-    }
-
     const fetchComments = async () => {
       try {
-        const supabase = createClient(
-          weddingData.supabaseConfig.apiEndpoint,
-          weddingData.supabaseConfig.apiKey
-        );
-        
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from('messages')
           .select('*')
           .order('created_at', { ascending: false });
@@ -46,16 +34,11 @@ export default function AdminComments() {
     };
 
     fetchComments();
-  }, []);
+  }, [supabaseClient]);
 
   const handleApprove = async (id: string) => {
     try {
-      const supabase = createClient(
-        weddingData.supabaseConfig.apiEndpoint,
-        weddingData.supabaseConfig.apiKey
-      );
-      
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('messages')
         .update({ is_approved: true })
         .eq('id', id);
@@ -76,12 +59,7 @@ export default function AdminComments() {
 
   const handleDelete = async (id: string) => {
     try {
-      const supabase = createClient(
-        weddingData.supabaseConfig.apiEndpoint,
-        weddingData.supabaseConfig.apiKey
-      );
-      
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('messages')
         .delete()
         .eq('id', id);
