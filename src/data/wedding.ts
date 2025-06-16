@@ -1,17 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
 export const weddingData = {
-  coupleName: "张正轩 & 李梦",
-  weddingDate: "2025年6月28日",
+  coupleName: "张明 & 李雪",
+  weddingDate: "2025年10月1日",
   weddingDetails: {
-    date: "2025年6月28日",
-    time: "12点",
-    location: "好汉郓城.丽都大酒店",
-    address: "山东省郓城县西门街丽都大酒店",
+    date: "2025年10月1日",
+    time: "下午3点",
+    location: "青岛瑞吉酒店",
+    address: "山东省青岛市市南区香港中路48号"
   },
   mapData: {
-    lat: 35.61,
-    lng: 115.95,
+    lat: 36.06623,
+    lng: 120.384428,
     marker: {
       icon: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=%E5%A9%9A%E7%A4%BC%E5%9C%B0%E7%82%B9%E6%A0%87%E8%AE%B0%EF%BC%8C%E7%B2%89%E8%89%B2%E5%BF%83%E5%BD%A2%EF%BC%8C%E7%AE%80%E7%BA%A6%E6%B8%85%E6%96%B0%E9%A3%8E%E6%A0%BC&sign=997c8d874089ac47cdd534f458374d7a"
     }
@@ -87,49 +87,67 @@ export const weddingData = {
       approved: true
     }
   ],
-  // Supabase配置 - 从环境变量读取
-  supabaseConfig: {
-    tableName: "guests",
-    schema: `
-      CREATE TABLE guests (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        name TEXT NOT NULL,
-        phone TEXT,
-        relationship TEXT,
-        table_number TEXT,
-        is_attending BOOLEAN DEFAULT false,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-        updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-      );
-      
-      CREATE TABLE visitors (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        ip_address TEXT NOT NULL,
-        visit_time TIMESTAMP WITH TIME ZONE DEFAULT now(),
-        user_agent TEXT,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-      );
-      
-      -- 创建索引
-      CREATE INDEX idx_guests_name ON guests(name);
-      CREATE INDEX idx_guests_phone ON guests(phone);
-      CREATE INDEX idx_visitors_time ON visitors(visit_time);
-      
-      -- RLS策略
-      ALTER TABLE guests ENABLE ROW LEVEL SECURITY;
-      ALTER TABLE visitors ENABLE ROW LEVEL SECURITY;
-      
-      -- 管理员可以完全访问
-      CREATE POLICY "Admin access guests" ON guests
-        FOR ALL USING (auth.role() = 'admin');
-      CREATE POLICY "Admin access visitors" ON visitors
-        FOR ALL USING (auth.role() = 'admin');
-      
-      -- 其他角色只能读取
-      CREATE POLICY "Read access guests" ON guests
-        FOR SELECT USING (true);
-      CREATE POLICY "Insert access visitors" ON visitors
-        FOR INSERT WITH CHECK (true);
+    // Supabase配置 - 从环境变量读取
+    supabaseConfig: {
+      tableName: "guests",
+      schema: `
+        CREATE TABLE guests (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          name TEXT NOT NULL,
+          phone TEXT,
+          relationship TEXT,
+          table_number TEXT,
+          is_attending BOOLEAN DEFAULT false,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+        );
+        
+        CREATE TABLE visitors (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          ip_address TEXT NOT NULL,
+          visit_time TIMESTAMP WITH TIME ZONE DEFAULT now(),
+          user_agent TEXT,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+        );
+        
+        -- 留言表
+        CREATE TABLE messages (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          name TEXT NOT NULL,
+          content TEXT NOT NULL,
+          emoji TEXT,
+          is_approved BOOLEAN DEFAULT false,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+        );
+        
+        -- 创建索引
+        CREATE INDEX idx_guests_name ON guests(name);
+        CREATE INDEX idx_guests_phone ON guests(phone);
+        CREATE INDEX idx_visitors_time ON visitors(visit_time);
+        CREATE INDEX idx_messages_created ON messages(created_at);
+        
+        -- RLS策略
+        ALTER TABLE guests ENABLE ROW LEVEL SECURITY;
+        ALTER TABLE visitors ENABLE ROW LEVEL SECURITY;
+        ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+        
+        -- 管理员可以完全访问
+        CREATE POLICY "Admin access guests" ON guests
+          FOR ALL USING (auth.role() = 'admin');
+        CREATE POLICY "Admin access visitors" ON visitors
+          FOR ALL USING (auth.role() = 'admin');
+        CREATE POLICY "Admin access messages" ON messages
+          FOR ALL USING (auth.role() = 'admin');
+        
+        -- 其他角色权限
+        CREATE POLICY "Read access guests" ON guests
+          FOR SELECT USING (true);
+        CREATE POLICY "Insert access visitors" ON visitors
+          FOR INSERT WITH CHECK (true);
+        CREATE POLICY "Insert access messages" ON messages
+          FOR INSERT WITH CHECK (true);
+        CREATE POLICY "Read approved messages" ON messages
+          FOR SELECT USING (is_approved = true OR auth.role() = 'admin');
     `,
     apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co",
     apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key",
@@ -206,10 +224,31 @@ export const weddingData = {
       );
       const { data, error } = await supabase
         .from('messages')
-        .insert({ name, content, emoji });
+        .insert({ 
+          name, 
+          content, 
+          emoji,
+          is_approved: false // 新留言默认未审核
+        });
       
       if (error) throw error;
       return data;
+    },
+    
+    // 获取已审核留言
+    getApprovedMessages: async () => {
+      const supabase = createClient(
+        weddingData.supabaseConfig.apiEndpoint,
+        weddingData.supabaseConfig.apiKey
+      );
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('is_approved', true)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
     }
   },
   
