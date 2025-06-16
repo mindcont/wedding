@@ -4,7 +4,7 @@ export const weddingData = {
   weddingDetails: {
     date: "2025年6月28日",
     time: "12点",
-    location: "山东.郓城.丽都大酒店",
+    location: "好汉郓城.丽都大酒店",
     address: "山东省郓城县西门街丽都大酒店",
   },
   mapData: {

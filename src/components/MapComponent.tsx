@@ -29,18 +29,45 @@ export default function MapComponent({
         return;
       }
       
-      try {
-        const AMap = window.AMap;
-        const map = new AMap.Map(mapRef.current!, {
-          zoom: weddingData.amapConfig.zoom,
-          center: markerPosition,
-          viewMode: '2D'
-        });
+     try {
+          const AMap = window.AMap;
+          const map = new AMap.Map(mapRef.current!, {
+            zoom: weddingData.amapConfig.zoom,
+            center: markerPosition,
+            viewMode: '2D',
+            zoomEnable: true,
+            dragEnable: true,
+            doubleClickZoom: true,
+            keyboardEnable: true
+          });
+
 
         // 添加控件
-        map.addControl(new AMap.ToolBar());
+        map.addControl(new AMap.ToolBar({
+          position: 'RB'
+        }));
         map.addControl(new AMap.Scale());
+        map.addControl(new AMap.HawkEye());
+        map.addControl(new AMap.ControlBar({
+          showZoomBar: true,
+          showControlButton: true,
+          position: {
+            right: '10px',
+            top: '10px'
+          }
+        }));
 
+        // 添加标记点
+        new AMap.Marker({
+          position: new AMap.LngLat(...markerPosition),
+          map: map,
+          icon: markerIcon,
+          offset: new AMap.Pixel(-13, -30),
+          anchor: 'bottom-center'
+        });
+
+        // 自动调整视图到合适级别
+        map.setFitView();
 
         setMapLoaded(true);
       } catch (error) {
