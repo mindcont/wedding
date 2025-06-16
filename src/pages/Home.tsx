@@ -11,15 +11,36 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 获取访客IP并记录
+    const fetchRecentVisitors = async () => {
+      try {
+        const supabase = createClient(
+          weddingData.supabaseConfig.apiEndpoint,
+          weddingData.supabaseConfig.apiKey
+        );
+        
+        const { data, error } = await supabase
+          .from('visitors')
+          .select('ip_address, visit_time')
+          .order('visit_time', { ascending: false })
+          .limit(5);
+
+        if (error) throw error;
+        setVisitors(data || []);
+      } catch (error) {
+        console.error('获取访客记录失败:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     const recordVisitor = async () => {
-    try {
+      try {
         // 获取访客IP
         const response = await fetch('https://api.ipify.org?format=json');
         const data = await response.json();
         const ip = data.ip;
         
-        // 使用统一的Supabase配置记录访客
+        // 记录访客
         const supabase = createClient(
           weddingData.supabaseConfig.apiEndpoint,
           weddingData.supabaseConfig.apiKey
@@ -33,23 +54,19 @@ export default function Home() {
           });
           
         if (error) throw error;
-
         
-        // 获取最近访客记录
-        const { data: recentVisitors } = await supabase
-          .from('visitors')
-          .select('ip_address, visit_time')
-          .order('visit_time', { ascending: false })
-          .limit(5);
-
-        setVisitors(recentVisitors);
+        // 记录成功后获取最新访客列表
+        await fetchRecentVisitors();
       } catch (error) {
-        console.error('访客记录错误:', error);
-      } finally {
-        setLoading(false);
+        console.error('记录访客失败:', error);
+        // 即使记录失败也尝试获取已有访客列表
+        await fetchRecentVisitors();
       }
     };
 
+    // 先获取现有访客记录
+    fetchRecentVisitors();
+    // 然后记录新访客
     recordVisitor();
   }, []);
 
@@ -101,7 +118,13 @@ export default function Home() {
               <li key={index} className="flex justify-between text-sm">
                 <span>{visitor.ip_address}</span>
                 <span className="text-gray-500">
-                  {new Date(visitor.visit_time).toLocaleString()}
+                 {new Date(visitor.visit_time).toLocaleString('zh-CN', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
                 </span>
               </li>
             ))}
