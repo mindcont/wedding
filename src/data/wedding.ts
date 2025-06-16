@@ -124,10 +124,10 @@ export const weddingData = {
   
   // 高德地图配置
   amapConfig: {
-    key: "您的高德地图key",
+    key: "fb816786e7600306aa62ca9e0dc166f3",
     version: "2.0",
     plugins: ["AMap.Scale", "AMap.ToolBar"],
-    center: [120.384428, 36.06623], // 青岛瑞吉酒店坐标
+    center: [115.95, 35.61], // 山东.郓城.丽都大酒店坐标
     zoom: 15
   }
 };
