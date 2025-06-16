@@ -182,7 +182,7 @@ export const weddingData = {
       return data || [];
     },
     // 生成个性化邀请链接的函数
-    generateInviteLink: (name: string) => `/guest/${encodeURIComponent(name)}-invite`,
+    generateInviteLink: (name: string) => `/guest/${name}-invite`,
     getAllGuestLinks: async () => {
       const supabase = createClient(
         weddingData.supabaseConfig.apiEndpoint,
@@ -195,9 +195,9 @@ export const weddingData = {
       if (error) throw error;
       
       return data?.map(guest => ({
-        name: guest.name,
-        tableNumber: guest.table_number,
-        link: `/guest/${encodeURIComponent(guest.name)}-invite`
+         name: guest.name,
+         tableNumber: guest.table_number,
+         link: `/guest/${guest.name}-invite`
       })) || [];
     },
     
