@@ -29,7 +29,7 @@ export default function MapComponent({
         return;
       }
       
-     try {
+        try {
           const AMap = window.AMap;
           const map = new AMap.Map(mapRef.current!, {
             zoom: weddingData.amapConfig.zoom,
@@ -68,6 +68,7 @@ export default function MapComponent({
 
         // 自动调整视图到合适级别
         map.setFitView();
+
 
         setMapLoaded(true);
       } catch (error) {
