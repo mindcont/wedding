@@ -116,12 +116,15 @@ export const weddingData = {
         FOR SELECT USING (true);
     `,
     apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co",
-    apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key"
+    apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key",
+    // 生成个性化邀请链接的函数
+    generateInviteLink: (name: string) => `/guest/${encodeURIComponent(name)}-invite`
+
   },
   
   // 高德地图配置
   amapConfig: {
-    key: "fb816786e7600306aa62ca9e0dc166f3",
+    key: "您的高德地图key",
     version: "2.0",
     plugins: ["AMap.Scale", "AMap.ToolBar"],
     center: [120.384428, 36.06623], // 青岛瑞吉酒店坐标
