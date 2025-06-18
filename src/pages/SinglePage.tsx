@@ -424,20 +424,6 @@ export default function SinglePage() {
             )}
           </div>
           
-          <div className="mt-8">
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="overflow-hidden rounded-lg shadow-md"
-            >
-              <img
-                src={weddingData.featuredPhoto.url}
-                alt={weddingData.featuredPhoto.alt}
-                className="w-full h-auto object-cover rounded-lg"
-                style={{ aspectRatio: "3/4" }}
-              />
-            </motion.div>
-            <p className="mt-4 text-gray-600">张明 & 李雪</p>
-          </div>
         </motion.div>
       </div>
     </section>
@@ -480,6 +466,9 @@ export default function SinglePage() {
           </div>
           <p className="text-xs text-gray-500">
             最后更新: {new Date().toLocaleString('zh-CN')}
+          </p>
+          <p className="text-xs text-gray-500">
+            由 Coze 驱动，powered by Love
           </p>
         </div>
       </footer>

@@ -217,22 +217,37 @@ export const weddingData = {
     },
 
     // 获取总访问量
-   const getTotalVisits = async () => {
-  const { data, error } = await supabase
-    .from('visitors')
-    .select('*', { count: 'exact', head: true });
-  console.log('获取总访问量:', data, error);
-  if (error) {
-    console.error('计数查询失败:', error);
-    // 备用查询：获取全部记录后计算长度
-    const { data: fullData, error: altError } = await supabase
+ 
+ getTotalVisits = async () => {
+  const supabase = createClient(
+    weddingData.supabaseConfig.apiEndpoint,
+    weddingData.supabaseConfig.apiKey
+  );
+
+  try {
+    // 主查询：使用count估算优化性能
+    const { count, error } = await supabase
       .from('visitors')
-      .select('id');
-      
-    return altError ? 0 : fullData.length;
+      .select('*', { 
+        count: 'exact', 
+        head: true 
+      });
+
+    if (!error) return count || 0;
+
+    // 备用查询：精确计数
+    const { data, error: altError } = await supabase
+      .from('visitors')
+      .select('id')
+      .order('visit_time', { ascending: false });
+
+    return altError ? 0 : data?.length || 0;
+  } catch (err) {
+    console.error('统计异常:', err);
+    return 0;
   }
-  return data?.count || 0; // 显式访问data.count
-},
+};
+
 
     // 生成个性化邀请链接的函数
     generateInviteLink: (name: string) => `/guest/${name}-invite`,
