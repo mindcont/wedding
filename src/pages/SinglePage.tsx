@@ -186,21 +186,6 @@ export default function SinglePage() {
         </p>
       </div>
 
-              <div className="mt-8">
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="overflow-hidden rounded-lg shadow-md"
-            >
-              <img
-                src={weddingData.featuredPhoto.url}
-                alt={weddingData.featuredPhoto.alt}
-                className="w-full h-auto object-cover rounded-lg"
-                style={{ aspectRatio: "3/4" }}
-              />
-            </motion.div>
-            <p className="mt-4 text-gray-600">张明 & 李雪</p>
-          </div>
-
       {messages.length > 0 && (
         <div className="w-full max-w-md mb-4 bg-white bg-opacity-80 rounded-lg shadow-md p-4">
           <h3 className="text-lg font-medium mb-2">祝福留言</h3>
@@ -237,13 +222,54 @@ export default function SinglePage() {
         </div>
       )}
 
-
+      <div className="w-full max-w-md mb-8">
+        {weddingData.navItems.map((item) => (
+          <motion.button
+            key={item.name}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => scrollToSection(item.name === '婚纱照' ? 'gallery' : item.name === '请柬' ? 'invitation' : 'wishes')}
+            className="w-full bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 font-medium py-4 px-6 rounded-lg shadow-md mb-4 transition-all duration-300"
+          >
+            {item.name}
+          </motion.button>
+        ))}
+      </div>
 
 
     </section>
   );
 
+  // 相册内容
+  const renderGallerySection = () => (
+    <section id="gallery" className="min-h-screen bg-[#F8E0E0] p-4 pt-24">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-bold my-8 text-center" style={{ fontFamily: "'Great Vibes', cursive" }}>
+          我们的婚纱照
+        </h1>
 
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {weddingData.galleryPhotos.map((photo) => (
+            <motion.div
+              key={photo.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              onClick={() => setSelectedImage({ url: photo.url, alt: photo.alt })}
+            >
+              <img
+                src={photo.url}
+                alt={photo.alt}
+                className="w-full h-auto object-cover rounded-lg cursor-pointer transition-transform hover:scale-105"
+                style={{ aspectRatio: "3/4" }}
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 
   // 请柬内容
   const renderInvitationSection = () => (
@@ -333,45 +359,15 @@ export default function SinglePage() {
     </section>
   );
 
-    // 相册内容
-  const renderGallerySection = () => (
-    <section id="gallery" className="min-h-screen bg-[#F8E0E0] p-4 pt-24">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold my-8 text-center" style={{ fontFamily: "'Great Vibes', cursive" }}>
-          我们的婚纱照
-        </h1>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {weddingData.galleryPhotos.map((photo) => (
-            <motion.div
-              key={photo.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow"
-              onClick={() => setSelectedImage({ url: photo.url, alt: photo.alt })}
-            >
-              <img
-                src={photo.url}
-                alt={photo.alt}
-                className="w-full h-auto object-cover rounded-lg cursor-pointer transition-transform hover:scale-105"
-                style={{ aspectRatio: "3/4" }}
-              />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-  
   // 留言内容
   const renderWishesSection = () => (
     <section id="wishes" className="min-h-screen bg-[#F8E0E0] p-4 md:p-8 pt-24">
-      <div className="max-w-2xl mx-auto flex flex-col items-center justify-center min-h-screen">
+      <div className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white bg-opacity-80 rounded-lg shadow-lg p-8 w-full text-center"
+
         >
           <h1 
             className="text-4xl md:text-5xl font-bold mb-8"
@@ -471,7 +467,20 @@ export default function SinglePage() {
             )}
           </div>
           
-
+          <div className="mt-8">
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="overflow-hidden rounded-lg shadow-md"
+            >
+              <img
+                src={weddingData.featuredPhoto.url}
+                alt={weddingData.featuredPhoto.alt}
+                className="w-full h-auto object-cover rounded-lg"
+                style={{ aspectRatio: "3/4" }}
+              />
+            </motion.div>
+            <p className="mt-4 text-gray-600">张明 & 李雪</p>
+          </div>
         </motion.div>
       </div>
     </section>
