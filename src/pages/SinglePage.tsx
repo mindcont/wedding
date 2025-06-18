@@ -22,6 +22,16 @@ export default function SinglePage() {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { isAuthenticated } = useContext(AuthContext);
 
+  const fetchRecentVisitors = async () => {
+    try {
+      const visitors = await weddingData.supabaseConfig.getRecentVisitors();
+      console.log('成功获取最近访客:', visitors);
+    } catch (error) {
+      console.error('获取最近访客失败:', error);
+    }
+  };
+
+
   // 获取留言数据
   useEffect(() => {
     const fetchMessages = async () => {
@@ -40,30 +50,14 @@ export default function SinglePage() {
 
   // 获取访客数据
   useEffect(() => {
-    const fetchRecentVisitors = async () => {
+    const fetchTotalVisits = async () => {
       try {
         console.log('开始获取访客数据...');
-        const supabase = createClient(
-          weddingData.supabaseConfig.apiEndpoint,
-          weddingData.supabaseConfig.apiKey
-        );
-        
-        const [visitorsData, total] = await Promise.all([
-          supabase
-          .from('visitors')
-          .select('ip_address, visit_time')
-          .order('visit_time', { ascending: false })
-            .limit(5),
-          weddingData.supabaseConfig.getTotalVisits()
-        ]);
-
-        if (visitorsData.error) throw visitorsData.error;
-        console.log('成功获取访客数据:', visitorsData.data);
-        setVisitors(visitorsData.data || []);
+        const total = await weddingData.supabaseConfig.getTotalVisits();
         setTotalVisits(total);
       } catch (error) {
-        console.error('获取访客记录失败:', error);
-        toast.error('获取访客记录失败，请刷新重试');
+        console.error('获取访问总数失败:', error);
+        toast.error('获取访问总数失败，请刷新重试');
       } finally {
         setLoading(false);
       }
@@ -73,7 +67,7 @@ export default function SinglePage() {
       try {
         const ip = await weddingData.supabaseConfig.recordVisitor(navigator.userAgent);
         console.log('访客记录成功，IP:', ip);
-        await fetchRecentVisitors();
+        await fetchTotalVisits();
       } catch (error) {
         console.error('记录访客失败:', error);
         await fetchRecentVisitors();
@@ -513,7 +507,7 @@ export default function SinglePage() {
             <p className="text-gray-600 text-xs">加载中...</p>
             ) : (
               <p className="text-xl font-bold text-pink-500">
-                {visitors.length > 0 ? visitors.length : 0}
+                {totalVisits}
               </p>
             )}
           </div>

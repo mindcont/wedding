@@ -154,7 +154,6 @@ export const weddingData = {
     // 获取访客IP地址
     getVisitorIp: async () => {
       const ipApis = [
-        'https://api.ipify.org?format=json',
         'https://ipapi.co/json/',
         'https://ipinfo.io/json'
       ];
