@@ -185,7 +185,8 @@ export default function SinglePage() {
           {weddingData.weddingDate}
         </p>
       </div>
-                <div className="mt-8">
+
+              <div className="mt-8">
             <motion.div 
               whileHover={{ scale: 1.02 }}
               className="overflow-hidden rounded-lg shadow-md"
@@ -199,8 +200,6 @@ export default function SinglePage() {
             </motion.div>
             <p className="mt-4 text-gray-600">张明 & 李雪</p>
           </div>
-        </motion.div>
-      </div>
 
       {messages.length > 0 && (
         <div className="w-full max-w-md mb-4 bg-white bg-opacity-80 rounded-lg shadow-md p-4">
@@ -470,7 +469,22 @@ export default function SinglePage() {
             )}
           </div>
           
-
+          <div className="mt-8">
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="overflow-hidden rounded-lg shadow-md"
+            >
+              <img
+                src={weddingData.featuredPhoto.url}
+                alt={weddingData.featuredPhoto.alt}
+                className="w-full h-auto object-cover rounded-lg"
+                style={{ aspectRatio: "3/4" }}
+              />
+            </motion.div>
+            <p className="mt-4 text-gray-600">张明 & 李雪</p>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 
