@@ -230,8 +230,8 @@ export const weddingData = {
         // 方案2: 精确计数
         const { data, error: altError } = await supabase
           .from('visitors')
-          .select('id');
-        
+          .select('*', { count: 'exact' });
+
         if (!altError) {
           console.log('方案2查询成功，返回记录数:', data?.length || 0);
           return data?.length || 0;
