@@ -224,7 +224,7 @@ export const weddingData = {
       );
       const { count, error } = await supabase
         .from('visitors')
-        .select('*', { count: 'exact', head: true });
+        .select('id, ip_address', { count: 'exact' });
       
       if (error) {
         console.error('获取总访问量失败:', error);
