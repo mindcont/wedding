@@ -217,12 +217,11 @@ export const weddingData = {
     },
 
     // 获取总访问量
- 
- getTotalVisits = async () => {
-  const supabase = createClient(
-    weddingData.supabaseConfig.apiEndpoint,
-    weddingData.supabaseConfig.apiKey
-  );
+   getTotalVisits = async () => {
+     const supabase = createClient(
+       weddingData.supabaseConfig.apiEndpoint,
+       weddingData.supabaseConfig.apiKey
+     );
 
   try {
     // 主查询：使用count估算优化性能
@@ -246,7 +245,8 @@ export const weddingData = {
     console.error('统计异常:', err);
     return 0;
   }
-};
+    },
+
 
 
     // 生成个性化邀请链接的函数
