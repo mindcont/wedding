@@ -217,45 +217,22 @@ export const weddingData = {
     },
 
     // 获取总访问量
-    getTotalVisits: async () => {
-      const supabase = createClient(
-        weddingData.supabaseConfig.apiEndpoint,
-        weddingData.supabaseConfig.apiKey
-      );
-
-      try {
-        console.log('开始执行总访问量查询...');
-
-        // 首选查询方法：使用 .select() 的 count 选项获取精确计数
-        const { data: countData, error: countError } = await supabase
-          .from('visitors')
-          .select('id', { count: 'exact', head: true });
-
-        if (countError) {
-          console.error('获取总访问量（首选方法）失败:', countError);
-
-          // 备用查询方法：获取所有记录并计算长度
-          const { data: allData, error: altError } = await supabase
-            .from('visitors')
-            .select('id');
-
-          if (altError) {
-            console.error('获取总访问量（备用方法）也失败:', altError);
-            return 0;
-          }
-
-          console.log('备用查询成功，返回记录数:', allData.length);
-          return allData.length;
-        }
-
-        console.log('总访问量查询（首选方法）成功，返回:', countData?.count);
-        return countData?.count || 0;
-
-      } catch (err) {
-        console.error('获取总访问量时发生异常:', err);
-        return 0;
-      }
-    },
+   const getTotalVisits = async () => {
+  const { data, error } = await supabase
+    .from('visitors')
+    .select('*', { count: 'exact', head: true });
+  console.log('获取总访问量:', data, error);
+  if (error) {
+    console.error('计数查询失败:', error);
+    // 备用查询：获取全部记录后计算长度
+    const { data: fullData, error: altError } = await supabase
+      .from('visitors')
+      .select('id');
+      
+    return altError ? 0 : fullData.length;
+  }
+  return data?.count || 0; // 显式访问data.count
+},
 
     // 生成个性化邀请链接的函数
     generateInviteLink: (name: string) => `/guest/${name}-invite`,
