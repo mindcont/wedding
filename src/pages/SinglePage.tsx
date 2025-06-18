@@ -66,23 +66,8 @@ export default function SinglePage() {
 
     const recordVisitor = async () => {
       try {
-        const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        const ip = data.ip;
-        
-        const supabase = createClient(
-          weddingData.supabaseConfig.apiEndpoint,
-          weddingData.supabaseConfig.apiKey
-        );
-        
-        const { error } = await supabase
-          .from('visitors')
-          .insert({ 
-            ip_address: ip, 
-            user_agent: navigator.userAgent 
-          });
-          
-        if (error) throw error;
+        const ip = await weddingData.supabaseConfig.recordVisitor(navigator.userAgent);
+        console.log('访客记录成功，IP:', ip);
         await fetchRecentVisitors();
       } catch (error) {
         console.error('记录访客失败:', error);

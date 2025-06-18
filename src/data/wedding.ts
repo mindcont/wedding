@@ -151,17 +151,52 @@ export const weddingData = {
     `,
     apiEndpoint: import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co",
     apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key",
+    // 获取访客IP地址
+    getVisitorIp: async () => {
+      const ipApis = [
+        'https://api.ipify.org?format=json',
+        'https://ipapi.co/json/',
+        'https://ipinfo.io/json'
+      ];
+      
+      for (const api of ipApis) {
+        try {
+          const response = await fetch(api);
+          const data = await response.json();
+          return data.ip || data.ipAddress;
+        } catch (error) {
+          console.warn(`从${api}获取IP失败:`, error);
+        }
+      }
+      return 'unknown';
+    },
+
     // 记录访客信息
-    recordVisitor: async (ip: string, userAgent: string) => {
+    recordVisitor: async (userAgent: string) => {
       const supabase = createClient(
         weddingData.supabaseConfig.apiEndpoint,
         weddingData.supabaseConfig.apiKey
       );
+      
+      try {
+        const ip = await weddingData.supabaseConfig.getVisitorIp();
       const { error } = await supabase
         .from('visitors')
-        .insert({ ip_address: ip, user_agent: userAgent });
+          .insert({ 
+            ip_address: ip,
+            user_agent: userAgent 
+          });
       
-      if (error) console.error('记录访客失败:', error);
+        if (error) {
+          console.error('记录访客失败:', error);
+          throw error;
+        }
+        return ip;
+      } catch (error) {
+        console.error('记录访客信息时发生错误:', error);
+        // 即使失败也返回unknown以便继续流程
+        return 'unknown';
+      }
     },
     // 获取最近访客
     getRecentVisitors: async (limit = 5) => {
@@ -241,13 +276,18 @@ export const weddingData = {
         weddingData.supabaseConfig.apiEndpoint,
         weddingData.supabaseConfig.apiKey
       );
+      console.log('执行getApprovedMessages查询...');
       const { data, error } = await supabase
         .from('messages')
         .select('*')
         .eq('is_approved', true)
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error('获取已审核留言失败:', error);
+        throw error;
+      }
+      console.log('成功获取已审核留言:', data);
       return data || [];
     }
   },
