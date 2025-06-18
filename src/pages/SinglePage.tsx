@@ -54,6 +54,7 @@ export default function SinglePage() {
       try {
         console.log('开始获取访客数据...');
         const total = await weddingData.supabaseConfig.getTotalVisits();
+        console.log('成功获取访问总数:', total);
         setTotalVisits(total);
       } catch (error) {
         console.error('获取访问总数失败:', error);
