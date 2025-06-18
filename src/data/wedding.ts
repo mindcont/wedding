@@ -216,6 +216,23 @@ export const weddingData = {
       }
       return data || [];
     },
+
+    // 获取总访问量
+    getTotalVisits: async () => {
+      const supabase = createClient(
+        weddingData.supabaseConfig.apiEndpoint,
+        weddingData.supabaseConfig.apiKey
+      );
+      const { count, error } = await supabase
+        .from('visitors')
+        .select('*', { count: 'exact', head: true });
+      
+      if (error) {
+        console.error('获取总访问量失败:', error);
+        return 0;
+      }
+      return count || 0;
+    },
     // 生成个性化邀请链接的函数
     generateInviteLink: (name: string) => `/guest/${name}-invite`,
     getAllGuestLinks: async () => {

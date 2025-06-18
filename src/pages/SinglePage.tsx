@@ -17,6 +17,7 @@ export default function SinglePage() {
     emoji: '❤️'
   });
   const [visitors, setVisitors] = useState<{ip_address: string; visit_time: string}[]>([]);
+  const [totalVisits, setTotalVisits] = useState(0);
   const [loading, setLoading] = useState(true);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { isAuthenticated } = useContext(AuthContext);
@@ -47,15 +48,19 @@ export default function SinglePage() {
           weddingData.supabaseConfig.apiKey
         );
         
-        const { data, error } = await supabase
+        const [visitorsData, total] = await Promise.all([
+          supabase
           .from('visitors')
           .select('ip_address, visit_time')
           .order('visit_time', { ascending: false })
-          .limit(5);
+            .limit(5),
+          weddingData.supabaseConfig.getTotalVisits()
+        ]);
 
-        if (error) throw error;
-        console.log('成功获取访客数据:', data);
-        setVisitors(data || []);
+        if (visitorsData.error) throw visitorsData.error;
+        console.log('成功获取访客数据:', visitorsData.data);
+        setVisitors(visitorsData.data || []);
+        setTotalVisits(total);
       } catch (error) {
         console.error('获取访客记录失败:', error);
         toast.error('获取访客记录失败，请刷新重试');
@@ -501,29 +506,20 @@ export default function SinglePage() {
 
       {/* 页脚区域 */}
       <footer className="bg-white bg-opacity-80 py-4 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-sm font-medium mb-2">最近访客</h3>
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div>
+            <h3 className="text-sm font-medium mb-1">历史访问数量</h3>
           {loading ? (
             <p className="text-gray-600 text-xs">加载中...</p>
-          ) : visitors.length > 0 ? (
-            <ul className="grid grid-cols-2 md:grid-cols-5 gap-2">
-              {visitors.map((visitor, index) => (
-                <li key={index} className="text-xs">
-                  <span className="truncate block">{visitor.ip_address}</span>
-                  <span className="text-gray-500 text-xs">
-                    {new Date(visitor.visit_time).toLocaleString('zh-CN', {
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-600 text-xs">暂无访客记录</p>
-          )}
+            ) : (
+              <p className="text-xl font-bold text-pink-500">
+                {visitors.length > 0 ? visitors.length : 0}
+              </p>
+            )}
+          </div>
+          <p className="text-xs text-gray-500">
+            最后更新: {new Date().toLocaleString('zh-CN')}
+          </p>
         </div>
       </footer>
     </div>
