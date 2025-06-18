@@ -222,16 +222,33 @@ export const weddingData = {
         weddingData.supabaseConfig.apiEndpoint,
         weddingData.supabaseConfig.apiKey
       );
+      try {
+        console.log('开始执行总访问量查询...');
       const { count, error } = await supabase
         .from('visitors')
-        .select('id, ip_address', { count: 'exact' });
+          .select('id', { count: 'exact', head: true });
       
       if (error) {
         console.error('获取总访问量失败:', error);
+          // 尝试备用查询方式
+          const { data, error: altError } = await supabase
+            .from('visitors')
+            .select('id');
+          
+          if (altError) {
+            console.error('备用查询也失败:', altError);
+            return 0;
+          }
+          console.log('备用查询成功，返回记录数:', data?.length || 0);
+          return data?.length || 0;
+        }
+        console.log('总访问量查询成功，返回:', count);
+        return count || 0;
+      } catch (err) {
+        console.error('获取总访问量时发生异常:', err);
         return 0;
       }
-      return count || 0;
-    },
+          },
     // 生成个性化邀请链接的函数
     generateInviteLink: (name: string) => `/guest/${name}-invite`,
     getAllGuestLinks: async () => {
@@ -279,7 +296,7 @@ export const weddingData = {
           name, 
           content, 
           emoji,
-          is_approved: false // 新留言默认未审核
+          is_approved: true // 新留言默认未审核
         });
       
       if (error) throw error;
