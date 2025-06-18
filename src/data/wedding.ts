@@ -225,16 +225,7 @@ export const weddingData = {
       try {
         console.log('开始执行总访问量查询...');
         
-        // 方案1: 使用count估算
-        const { count, error } = await supabase
-          .from('visitors')
-          .select('*', { count: 'exact', head: true });
-        
-        if (!error) {
-          console.log('方案1查询成功，返回:', count);
-          return count || 0;
-        }
-        console.error('方案1失败:', error);
+      
 
         // 方案2: 精确计数
         const { data, error: altError } = await supabase

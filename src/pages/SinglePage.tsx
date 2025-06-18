@@ -465,11 +465,10 @@ export default function SinglePage() {
             )}
           </div>
           <p className="text-xs text-gray-500">
+             由 Coze AI 驱动，Powered by Love 
             最后更新: {new Date().toLocaleString('zh-CN')}
           </p>
-          <p className="text-xs text-gray-500">
-            由 Coze 驱动，powered by Love
-          </p>
+      
         </div>
       </footer>
     </div>
