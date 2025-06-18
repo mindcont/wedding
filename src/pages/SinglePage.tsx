@@ -177,41 +177,7 @@ export default function SinglePage() {
         </p>
       </div>
 
-      {messages.length > 0 && (
-        <div className="w-full max-w-md mb-4 bg-white bg-opacity-80 rounded-lg shadow-md p-4">
-          <h3 className="text-lg font-medium mb-2">祝福留言</h3>
-          <div 
-            ref={messagesContainerRef}
-            className="overflow-y-auto max-h-60 space-y-3 scrollbar-hide"
-          >
-            {messages.map((message) => (
-              <motion.div
-                key={message.id}
-                className="bg-white rounded-lg p-3 shadow-sm"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="flex items-start">
-                  <span className="text-2xl mr-2">{message.emoji || '❤️'}</span>
-                  <div>
-                    <p className="font-medium">{message.name}</p>
-                    <p className="text-gray-700 text-sm">{message.content}</p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {new Date(message.created_at).toLocaleString('zh-CN', {
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
+   
 
       <div className="w-full max-w-md mb-8">
         {weddingData.navItems.map((item) => (
