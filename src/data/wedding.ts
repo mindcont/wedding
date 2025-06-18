@@ -216,35 +216,57 @@ export const weddingData = {
       return data || [];
     },
 
-    // 获取总访问量
-   getTotalVisits = async () => {
-     const supabase = createClient(
-       weddingData.supabaseConfig.apiEndpoint,
-       weddingData.supabaseConfig.apiKey
-     );
+// 获取总访问量
+    getTotalVisits: async () => {
+      const supabase = createClient(
+        weddingData.supabaseConfig.apiEndpoint,
+        weddingData.supabaseConfig.apiKey
+      );
+      try {
+        console.log('开始执行总访问量查询...');
+        
+        // 方案1: 使用count估算
+        const { count, error } = await supabase
+          .from('visitors')
+          .select('*', { count: 'exact', head: true });
+        
+        if (!error) {
+          console.log('方案1查询成功，返回:', count);
+          return count || 0;
+        }
+        console.error('方案1失败:', error);
 
-  try {
-    // 主查询：使用count估算优化性能
-    const { count, error } = await supabase
-      .from('visitors')
-      .select('*', { 
-        count: 'exact', 
-        head: true 
-      });
+        // 方案2: 精确计数
+        const { data, error: altError } = await supabase
+          .from('visitors')
+          .select('id');
+        
+        if (!altError) {
+          console.log('方案2查询成功，返回记录数:', data?.length || 0);
+          return data?.length || 0;
+        }
+        console.error('方案2失败:', altError);
 
-    if (!error) return count || 0;
+        // 方案3: 使用rpc函数计数
+        try {
+          const { data, error: rpcError } = await supabase
+            .rpc('count_visitors');
+          
+          if (!rpcError && data) {
+            console.log('方案3查询成功，返回:', data);
+            return data;
+          }
+          console.error('方案3失败:', rpcError);
+        } catch (rpcErr) {
+          console.error('方案3异常:', rpcErr);
+        }
 
-    // 备用查询：精确计数
-    const { data, error: altError } = await supabase
-      .from('visitors')
-      .select('id')
-      .order('visit_time', { ascending: false });
-
-    return altError ? 0 : data?.length || 0;
-  } catch (err) {
-    console.error('统计异常:', err);
-    return 0;
-  }
+        // 所有方案都失败时返回0
+        return 0;
+      } catch (err) {
+        console.error('获取总访问量时发生异常:', err);
+        return 0;
+      }
     },
 
 
