@@ -25,10 +25,13 @@ export default function SinglePage() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
+        console.log('开始获取留言数据...');
         const data = await weddingData.supabaseConfig.getApprovedMessages();
+        console.log('成功获取留言数据:', data);
         setMessages(data);
       } catch (error) {
         console.error('获取留言失败:', error);
+        toast.error('获取留言失败，请刷新重试');
       }
     };
     fetchMessages();
@@ -38,6 +41,7 @@ export default function SinglePage() {
   useEffect(() => {
     const fetchRecentVisitors = async () => {
       try {
+        console.log('开始获取访客数据...');
         const supabase = createClient(
           weddingData.supabaseConfig.apiEndpoint,
           weddingData.supabaseConfig.apiKey
@@ -50,9 +54,11 @@ export default function SinglePage() {
           .limit(5);
 
         if (error) throw error;
+        console.log('成功获取访客数据:', data);
         setVisitors(data || []);
       } catch (error) {
         console.error('获取访客记录失败:', error);
+        toast.error('获取访客记录失败，请刷新重试');
       } finally {
         setLoading(false);
       }
