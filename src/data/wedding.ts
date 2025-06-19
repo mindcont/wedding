@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 // 本地图片资源路径
-const localImagePath = (category: string, filename: string) =>
-  `/src/data/img/${category}/${filename}`;
+const localImagePath = (filename: string) =>
+  `/src/data/img/${filename}`;
 
 export const weddingData = {
   coupleName: "张正轩 & 李梦",
@@ -16,7 +16,7 @@ export const weddingData = {
     lat: 36.06623,
     lng: 120.384428,
     marker: {
-      icon: localImagePath('map', 'love.png')
+      icon: localImagePath('love.png')
     }
   },
   navItems: [
@@ -27,12 +27,12 @@ export const weddingData = {
   galleryPhotos: [
     {
       id: "1",
-      url: localImagePath('gallery', 'erduo.jpg'),
+      url: localImagePath( 'erduo.jpg'),
       alt: "海边日落婚纱照"
     },
     {
       id: "2",
-      url: localImagePath('gallery', 'european_architecture.webp'),
+      url: localImagePath( 'european_architecture.webp'),
       alt: "欧式建筑婚纱照"
     },
     {
