@@ -177,7 +177,7 @@ export default function SinglePage() {
           {weddingData.weddingDate}
         </p>
         <p className="text-lg md:text-xl mt-2" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300}}>
-          {'热烈欢迎您的到来，见证我们的幸福时刻！'}
+          {'来水浒故里，喝金都美酒，见证我们的幸福时刻！'}
         </p>
       </div>
       <div className="w-full max-w-md mb-8">
