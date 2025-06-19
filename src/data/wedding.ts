@@ -1,19 +1,22 @@
 import { createClient } from '@supabase/supabase-js';
+// 本地图片资源路径
+const localImagePath = (category: string, filename: string) =>
+  `/src/data/img/${category}/${filename}`;
 
 export const weddingData = {
-  coupleName: "张明 & 李雪",
-  weddingDate: "2025年10月1日",
+  coupleName: "张正轩 & 李梦",
+  weddingDate: "2025年6月28日",
   weddingDetails: {
-    date: "2025年10月1日",
-    time: "下午3点",
-    location: "青岛瑞吉酒店",
-    address: "山东省青岛市市南区香港中路48号"
+    date: "2025年6月28日",
+    time: "中午12点",
+    location: "菏泽郓城县",
+    address: "山东省菏泽市郓城县丽都大酒店"
   },
   mapData: {
     lat: 36.06623,
     lng: 120.384428,
     marker: {
-      icon: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=%E5%A9%9A%E7%A4%BC%E5%9C%B0%E7%82%B9%E6%A0%87%E8%AE%B0%EF%BC%8C%E7%B2%89%E8%89%B2%E5%BF%83%E5%BD%A2%EF%BC%8C%E7%AE%80%E7%BA%A6%E6%B8%85%E6%96%B0%E9%A3%8E%E6%A0%BC&sign=997c8d874089ac47cdd534f458374d7a"
+      icon: localImagePath('map', 'love.png')
     }
   },
   navItems: [
@@ -24,12 +27,12 @@ export const weddingData = {
   galleryPhotos: [
     {
       id: "1",
-      url: "https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=%E6%B5%AA%E6%BC%AB%E5%A9%9A%E7%BA%B1%E7%85%A7%EF%BC%8C%E6%B5%B7%E8%BE%B9%E6%97%A5%E8%90%BD%EF%BC%8C%E6%96%B0%E4%BA%BA%E7%9B%B8%E6%8B%A5%EF%BC%8C%E4%B8%93%E4%B8%9A%E6%91%84%E5%BD%B1%E9%A3%8E%E6%A0%BC&sign=51b0db37caf6beacb0e4482618598e71",
+      url: localImagePath('gallery', 'erduo.jpg'),
       alt: "海边日落婚纱照"
     },
     {
       id: "2",
-      url: "https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=%E5%8F%A4%E5%85%B8%E9%A3%8E%E6%A0%BC%E5%A9%9A%E7%BA%B1%E7%85%A7%EF%BC%8C%E6%AC%A7%E5%BC%8F%E5%BB%BA%E7%AD%91%E8%83%8C%E6%99%AF%EF%BC%8C%E6%96%B0%E4%BA%BA%E7%AB%AF%E5%BA%84%E7%AB%99%E7%AB%8B&sign=7ce2c541ab19b76dd2fc024bb625ad0b",
+      url: localImagePath('gallery', 'european_architecture.webp'),
       alt: "欧式建筑婚纱照"
     },
     {
@@ -87,10 +90,10 @@ export const weddingData = {
       approved: true
     }
   ],
-    // Supabase配置 - 从环境变量读取
-    supabaseConfig: {
-      tableName: "guests",
-      schema: `
+  // Supabase配置 - 从环境变量读取
+  supabaseConfig: {
+    tableName: "guests",
+    schema: `
         CREATE TABLE guests (
           id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
           name TEXT NOT NULL,
@@ -157,7 +160,7 @@ export const weddingData = {
         'https://ipapi.co/json/',
         'https://ipinfo.io/json'
       ];
-      
+
       for (const api of ipApis) {
         try {
           const response = await fetch(api);
@@ -176,16 +179,16 @@ export const weddingData = {
         weddingData.supabaseConfig.apiEndpoint,
         weddingData.supabaseConfig.apiKey
       );
-      
+
       try {
         const ip = await weddingData.supabaseConfig.getVisitorIp();
-      const { error } = await supabase
-        .from('visitors')
-          .insert({ 
+        const { error } = await supabase
+          .from('visitors')
+          .insert({
             ip_address: ip,
-            user_agent: userAgent 
+            user_agent: userAgent
           });
-      
+
         if (error) {
           console.error('记录访客失败:', error);
           throw error;
@@ -208,7 +211,7 @@ export const weddingData = {
         .select('ip_address, visit_time')
         .order('visit_time', { ascending: false })
         .limit(limit);
-      
+
       if (error) {
         console.error('获取访客记录失败:', error);
         return [];
@@ -216,7 +219,7 @@ export const weddingData = {
       return data || [];
     },
 
-// 获取总访问量
+    // 获取总访问量
     getTotalVisits: async () => {
       const supabase = createClient(
         weddingData.supabaseConfig.apiEndpoint,
@@ -224,8 +227,8 @@ export const weddingData = {
       );
       try {
         console.log('开始执行总访问量查询...');
-        
-      
+
+
 
         // 方案2: 精确计数
         const { data, error: altError } = await supabase
@@ -242,7 +245,7 @@ export const weddingData = {
         try {
           const { data, error: rpcError } = await supabase
             .rpc('count_visitors');
-          
+
           if (!rpcError && data) {
             console.log('方案3查询成功，返回:', data);
             return data;
@@ -272,16 +275,16 @@ export const weddingData = {
       const { data, error } = await supabase
         .from('guests')
         .select('name, table_number');
-      
+
       if (error) throw error;
-      
+
       return data?.map(guest => ({
-         name: guest.name,
-         tableNumber: guest.table_number,
-         link: `/guest/${guest.name}-invite`
+        name: guest.name,
+        tableNumber: guest.table_number,
+        link: `/guest/${guest.name}-invite`
       })) || [];
     },
-    
+
     // 获取留言
     getMessages: async () => {
       const supabase = createClient(
@@ -292,11 +295,11 @@ export const weddingData = {
         .from('messages')
         .select('*')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data || [];
     },
-    
+
     // 添加留言
     addMessage: async (name: string, content: string, emoji?: string) => {
       const supabase = createClient(
@@ -305,17 +308,17 @@ export const weddingData = {
       );
       const { data, error } = await supabase
         .from('messages')
-        .insert({ 
-          name, 
-          content, 
+        .insert({
+          name,
+          content,
           emoji,
           is_approved: true // 新留言默认未审核
         });
-      
+
       if (error) throw error;
       return data;
     },
-    
+
     // 获取已审核留言
     getApprovedMessages: async () => {
       const supabase = createClient(
@@ -328,7 +331,7 @@ export const weddingData = {
         .select('*')
         .eq('is_approved', true)
         .order('created_at', { ascending: false });
-      
+
       if (error) {
         console.error('获取已审核留言失败:', error);
         throw error;
@@ -337,7 +340,7 @@ export const weddingData = {
       return data || [];
     }
   },
-  
+
   // 高德地图配置
   amapConfig: {
     key: import.meta.env.VITE_AMAP_KEY || "您的高德地图key",

@@ -9,14 +9,14 @@ import { ImageModal } from "@/components/ImageModal";
 
 export default function SinglePage() {
   const [activeSection, setActiveSection] = useState('home');
-  const [selectedImage, setSelectedImage] = useState<{url: string; alt: string} | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{ url: string; alt: string } | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState({
     name: '',
     content: '',
     emoji: '❤️'
   });
-  const [visitors, setVisitors] = useState<{ip_address: string; visit_time: string}[]>([]);
+  const [visitors, setVisitors] = useState<{ ip_address: string; visit_time: string }[]>([]);
   const [totalVisits, setTotalVisits] = useState(0);
   const [loading, setLoading] = useState(true);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -100,9 +100,9 @@ export default function SinglePage() {
 
     const scrollMessages = () => {
       if (!isScrolling) return;
-      
+
       scrollPosition += scrollDirection * 0.5;
-      
+
       if (scrollPosition >= scrollHeight) {
         isScrolling = false;
         setTimeout(() => {
@@ -126,7 +126,7 @@ export default function SinglePage() {
     };
 
     const scrollInterval = requestAnimationFrame(scrollMessages);
-    
+
     return () => cancelAnimationFrame(scrollInterval);
   }, [messages]);
 
@@ -136,7 +136,7 @@ export default function SinglePage() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4">
-            <button 
+            <button
               onClick={() => scrollToSection('home')}
               className="text-xl font-medium text-gray-800 hover:text-pink-400 transition-colors"
             >
@@ -176,8 +176,6 @@ export default function SinglePage() {
           {weddingData.weddingDate}
         </p>
       </div>
-
-   
 
       <div className="w-full max-w-md mb-8">
         {weddingData.navItems.map((item) => (
@@ -232,7 +230,7 @@ export default function SinglePage() {
   const renderInvitationSection = () => (
     <section id="invitation" className="min-h-screen bg-[#F8E0E0] p-4 md:p-8 pt-24">
       <div className="max-w-4xl mx-auto">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-8"
@@ -240,7 +238,7 @@ export default function SinglePage() {
           <h2 className="text-3xl font-bold mb-4 text-center" style={{ fontFamily: "'Great Vibes', cursive" }}>
             婚礼邀请函
           </h2>
-          
+
           <div className="space-y-4">
             <div className="flex items-center">
               <i className="fa-regular fa-calendar text-xl mr-4 text-pink-300"></i>
@@ -249,7 +247,7 @@ export default function SinglePage() {
                 <p>{weddingData.weddingDetails.date}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center">
               <i className="fa-regular fa-clock text-xl mr-4 text-pink-300"></i>
               <div>
@@ -257,7 +255,7 @@ export default function SinglePage() {
                 <p>{weddingData.weddingDetails.time}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center">
               <i className="fa-regular fa-location-dot text-xl mr-4 text-pink-300"></i>
               <div>
@@ -269,7 +267,7 @@ export default function SinglePage() {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -285,7 +283,7 @@ export default function SinglePage() {
           </button>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -295,14 +293,14 @@ export default function SinglePage() {
             <h3 className="text-xl font-medium mb-2">婚礼地点导航</h3>
             <p className="text-sm text-gray-600 mb-4">点击下方地图查看路线</p>
           </div>
-          
-          <MapComponent 
+
+          <MapComponent
             markerPosition={[weddingData.mapData.lng, weddingData.mapData.lat]}
             markerIcon={weddingData.mapData.marker.icon}
           />
-          
+
           <div className="p-4">
-            <a 
+            <a
               href={`https://uri.amap.com/marker?position=${weddingData.mapData.lng},${weddingData.mapData.lat}&name=${encodeURIComponent(weddingData.weddingDetails.location)}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -320,26 +318,26 @@ export default function SinglePage() {
   const renderWishesSection = () => (
     <section id="wishes" className="min-h-screen bg-[#F8E0E0] p-4 md:p-8 pt-24">
       <div className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white bg-opacity-80 rounded-lg shadow-lg p-8 w-full text-center"
 
         >
-          <h1 
+          <h1
             className="text-4xl md:text-5xl font-bold mb-8"
             style={{ fontFamily: "'Great Vibes', cursive" }}
           >
             尊敬的宾客
           </h1>
-          
-          <p 
+
+          <p
             className="text-xl md:text-2xl mb-8 leading-relaxed"
             style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300 }}
           >
             感谢您来见证我们的幸福时刻！
           </p>
-          
+
           {/* 留言表单 */}
           <div className="mt-8 w-full">
             <div className="bg-white bg-opacity-80 rounded-lg shadow-md p-6 mb-6">
@@ -350,21 +348,21 @@ export default function SinglePage() {
                   placeholder="您的姓名"
                   className="w-full px-4 py-2 border rounded-lg"
                   value={newMessage.name}
-                  onChange={(e) => setNewMessage({...newMessage, name: e.target.value})}
+                  onChange={(e) => setNewMessage({ ...newMessage, name: e.target.value })}
                 />
                 <textarea
                   placeholder="祝福内容"
                   className="w-full px-4 py-2 border rounded-lg"
                   rows={3}
                   value={newMessage.content}
-                  onChange={(e) => setNewMessage({...newMessage, content: e.target.value})}
+                  onChange={(e) => setNewMessage({ ...newMessage, content: e.target.value })}
                 />
                 <div className="flex items-center space-x-2">
                   <span className="text-2xl">{newMessage.emoji}</span>
-                  <select 
+                  <select
                     className="px-3 py-1 border rounded-lg"
                     value={newMessage.emoji}
-                    onChange={(e) => setNewMessage({...newMessage, emoji: e.target.value})}
+                    onChange={(e) => setNewMessage({ ...newMessage, emoji: e.target.value })}
                   >
                     <option value="❤️">❤️ 爱心</option>
                     <option value="😊">😊 微笑</option>
@@ -386,7 +384,7 @@ export default function SinglePage() {
                         newMessage.emoji
                       );
                       toast.success('留言已提交');
-                      setNewMessage({name: '', content: '', emoji: '❤️'});
+                      setNewMessage({ name: '', content: '', emoji: '❤️' });
                       const data = await weddingData.supabaseConfig.getMessages();
                       setMessages(data);
                     } catch (error) {
@@ -399,7 +397,7 @@ export default function SinglePage() {
                 </button>
               </div>
             </div>
-            
+
             {/* 留言列表 */}
             {messages.length > 0 && (
               <div className="bg-white bg-opacity-80 rounded-lg shadow-md p-6">
@@ -423,7 +421,7 @@ export default function SinglePage() {
               </div>
             )}
           </div>
-          
+
         </motion.div>
       </div>
     </section>
@@ -456,24 +454,24 @@ export default function SinglePage() {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div>
             <h3 className="text-sm font-medium mb-1">历史访问数量</h3>
-          {loading ? (
-            <p className="text-gray-600 text-xs">加载中...</p>
+            {loading ? (
+              <p className="text-gray-600 text-xs">加载中...</p>
             ) : (
               <p className="text-xl font-bold text-pink-500">
                 {totalVisits}
               </p>
             )}
           </div>
-              <div>
-            <h3 className="text-sm font-medium mb-1"> 由 Coze AI 驱动，Powered by Love</h3>
+          <div>
+            <h3 className="text-sm font-medium mb-1"> <a href="https://www.coze.cn" target="_blank">由 Coze AI 驱动，Powered by Love</a></h3>
 
-   <p className="text-xs text-gray-500">
-             
-            最后更新: {new Date().toLocaleString('zh-CN')}
-          </p>
-              </div>
-       
-      
+            <p className="text-xs text-gray-500">
+
+              最后更新: {new Date().toLocaleString('zh-CN')}
+            </p>
+          </div>
+
+
         </div>
       </footer>
     </div>
