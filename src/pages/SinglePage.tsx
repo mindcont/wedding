@@ -170,14 +170,14 @@ export default function SinglePage() {
     <section id="home" className="min-h-screen flex flex-col items-center justify-between p-8 pt-24">
 
       <div className="flex flex-col items-center justify-center w-full h-full  bg-opacity-50 rounded-lg">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ fontFamily: "'Great Vibes', cursive", color: 'white' }}>
+        <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ fontFamily: "'Great Vibes', cursive"}}>
           {weddingData.coupleName}
         </h1>
-        <p className="text-xl md:text-2xl mt-4" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300, color: 'white' }}>
+        <p className="text-xl md:text-2xl mt-4" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300}}>
           {weddingData.weddingDate}
         </p>
-        <p className="text-lg md:text-xl mt-2" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300, color: 'white' }}>
-          {'{菏泽市郓城县.丽都大酒店}  热烈欢迎您的到来，见证我们的幸福时刻！'}
+        <p className="text-lg md:text-xl mt-2" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300}}>
+          {'热烈欢迎您的到来，见证我们的幸福时刻！'}
         </p>
       </div>
       <div className="w-full max-w-md mb-8">
