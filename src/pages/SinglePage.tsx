@@ -282,7 +282,7 @@ export default function SinglePage() {
             onClick={() => scrollToSection('wishes')}
             className="w-full py-3 px-6 rounded-lg bg-pink-300 hover:bg-pink-400 text-white transition-colors"
           >
-            查看专属邀请
+            留下您的祝福
           </button>
         </motion.div>
 

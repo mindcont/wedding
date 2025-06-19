@@ -9,7 +9,7 @@ export const weddingData = {
   weddingDetails: {
     date: "2025年6月28日 （农历六月初四）",
     time: "中午12点",
-    location: "菏泽郓城县",
+    location: "郓城县",
     address: "山东省菏泽市郓城县.丽都大酒店"
   },
 
@@ -55,6 +55,26 @@ export const weddingData = {
       id: "6",
       url: localImagePath('6.webp'),
       alt: "创意气球婚纱照"
+    },
+    {
+      id: "7",
+      url: localImagePath('7.webp'),
+      alt: "浪漫花海婚纱照"
+    },
+    {
+      id: "8",
+      url: localImagePath('8.webp'),
+      alt: "梦幻星空婚纱照"
+    },
+    {
+      id: "9",
+      url: localImagePath('9.webp'),
+      alt: "经典黑白婚纱照"
+    },
+    {
+      id: "10",
+      url: localImagePath('10.webp'),
+      alt: "甜美粉色婚纱照"
     }
   ],
   guestMessages: [
