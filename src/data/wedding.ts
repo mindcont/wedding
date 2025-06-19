@@ -10,11 +10,12 @@ export const weddingData = {
     date: "2025年6月28日 （农历六月初四）",
     time: "中午12点",
     location: "菏泽郓城县",
-    address: "山东省菏泽市郓城县丽都大酒店"
+    address: "山东省菏泽市郓城县.丽都大酒店"
   },
+
   mapData: {
-    lat: 36.06623,
-    lng: 120.384428,
+    lat: 35.610928105788716,
+    lng: 115.93413676285013,
     marker: {
       icon: localImagePath('maker2.png')
     }
@@ -328,7 +329,7 @@ export const weddingData = {
     key: import.meta.env.VITE_AMAP_KEY || "您的高德地图key",
     version: "2.0",
     plugins: ["AMap.Scale", "AMap.ToolBar", "AMap.HawkEye", "AMap.ControlBar"],
-    center: [115.93413676285013, 35.610928105788716], // 青岛瑞吉酒店坐标
+    center: [115.93413676285013, 35.610928105788716], // 郓城丽都酒店
     zoom: 15,
     minZoom: 10,
     maxZoom: 18
