@@ -175,6 +175,12 @@ export default function SinglePage() {
         <p className="text-xl md:text-2xl mt-4" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300 }}>
           {weddingData.weddingDate}
         </p>
+        <p className="text-lg md:text-xl mt-2" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300 }}>
+          {weddingData.weddingLocation}
+        </p>
+        <p className="text-lg md:text-xl mt-2" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300 }}>
+          {'热烈欢迎您的到来，见证我们的幸福时刻！'}
+        </p>
       </div>
 
       <div className="w-full max-w-md mb-8">

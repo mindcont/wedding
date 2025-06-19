@@ -8,15 +8,13 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import fs from 'fs';
 import path from 'path';
 
-// 动态获取图片路径
 function getImages() {
-  const imagesDir = path.resolve(__dirname, 'src/assets/img');
+  const imagesDir = path.resolve(__dirname, 'public/assets/img');
   const files = fs.readdirSync(imagesDir);
   
-  // 过滤出图片文件，并生成相对路径
   return files
-    .filter(file => /\.(png|jpe?g|gif|svg)$/.test(file)) // 根据需要添加其他扩展名
-    .map(file => `/src/assets/img/${file}`); // 返回相对路径
+    .filter(file => /\.(png|jpe?g|gif|svg)$/.test(file))
+    .map(file => `/assets/img/${file}`); // 注意这里的路径
 }
 
 // 生成图片路径数组
