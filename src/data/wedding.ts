@@ -7,7 +7,7 @@ export const weddingData = {
   coupleName: "张正轩 & 李梦",
   weddingDate: "2025年6月28日",
   weddingDetails: {
-    date: "2025年6月28日",
+    date: "2025年6月28日 （农历六月初四）",
     time: "中午12点",
     location: "菏泽郓城县",
     address: "山东省菏泽市郓城县丽都大酒店"
@@ -16,7 +16,7 @@ export const weddingData = {
     lat: 36.06623,
     lng: 120.384428,
     marker: {
-      icon: localImagePath('love.png')
+      icon: localImagePath('maker.png')
     }
   },
   navItems: [
@@ -27,32 +27,32 @@ export const weddingData = {
   galleryPhotos: [
     {
       id: "1",
-      url: localImagePath('erduo.jpg'),
+      url: localImagePath('1.webp'),
       alt: "海边日落婚纱照"
     },
     {
       id: "2",
-      url: localImagePath('european_architecture.webp'),
+      url: localImagePath('2.webp'),
       alt: "欧式建筑婚纱照"
     },
     {
       id: "3",
-      url: "https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=%E6%A3%AE%E6%9E%97%E4%B8%BB%E9%A2%98%E5%A9%9A%E7%BA%B1%E7%85%A7%EF%BC%8C%E9%98%B3%E5%85%89%E9%80%8F%E8%BF%87%E6%A0%91%E5%8F%B6%EF%BC%8C%E6%96%B0%E4%BA%BA%E8%87%AA%E7%84%B6%E4%BA%92%E5%8A%A8&sign=8a0e21e73d106bebbd153d13cd10c59e",
+      url: localImagePath('3.webp'),
       alt: "森林主题婚纱照"
     },
     {
       id: "4",
-      url: "https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=%E5%9F%8E%E5%B8%82%E5%A4%9C%E6%99%AF%E5%A9%9A%E7%BA%B1%E7%85%A7%EF%BC%8C%E9%9C%93%E8%99%B9%E7%81%AF%E5%85%89%E8%83%8C%E6%99%AF%EF%BC%8C%E6%96%B0%E4%BA%BA%E6%B5%AA%E6%BC%AB%E5%AF%B9%E8%A7%86&sign=b02c8281fe279688b8a0d3de6627d54d",
+      url: localImagePath('4.webp'),
       alt: "城市夜景婚纱照"
     },
     {
       id: "5",
-      url: "https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=%E4%BC%A0%E7%BB%9F%E4%B8%AD%E5%BC%8F%E5%A9%9A%E7%BA%B1%E7%85%A7%EF%BC%8C%E7%BA%A2%E8%89%B2%E7%A4%BC%E6%9C%8D%EF%BC%8C%E5%8F%A4%E5%85%B8%E5%BA%AD%E9%99%A2%E8%83%8C%E6%99%AF&sign=cb169b84f7f7e486a23b2dd76e870849",
+      url: localImagePath('5.webp'),
       alt: "中式传统婚纱照"
     },
     {
       id: "6",
-      url: "https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=%E5%88%9B%E6%84%8F%E5%A9%9A%E7%BA%B1%E7%85%A7%EF%BC%8C%E6%B0%94%E7%90%83%E8%83%8C%E6%99%AF%EF%BC%8C%E6%96%B0%E4%BA%BA%E8%B7%B3%E8%B7%83%E7%9E%AC%E9%97%B4&sign=20644475b60565b02a37ddb418420b8c",
+      url: localImagePath('6.webp'),
       alt: "创意气球婚纱照"
     }
   ],
@@ -67,7 +67,7 @@ export const weddingData = {
     }
   ],
   featuredPhoto: {
-    url: "https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=%E7%B2%89%E8%89%B2%E4%B8%BB%E9%A2%98%E5%A9%9A%E7%BA%B1%E7%85%A7%EF%BC%8C%E6%96%B0%E4%BA%BA%E7%9B%B8%E6%8B%A5%EF%BC%8C%E6%B5%AA%E6%BC%AB%E6%84%9F%EF%BC%8C%E7%AE%80%E7%BA%A6%E9%A3%8E%E6%A0%BC&sign=67fd7985eb9af582e75f8653e1db233a",
+    url: localImagePath('featured.webp'),
     alt: "精选婚纱照"
   },
   comments: [
