@@ -233,10 +233,10 @@ export const weddingData = {
           .select('*', { count: 'exact' });
 
         if (!altError) {
-          console.log('方案2查询成功，返回记录数:', data?.length || 0);
+          console.log('查询总访问量成功，返回记录数:', data?.length || 0);
           return data?.length || 0;
         }
-        console.error('方案2失败:', altError);
+        console.error('查询总访问量失败:', altError);
         // 所有方案都失败时返回0
         return 0;
       } catch (err) {
