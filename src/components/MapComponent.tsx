@@ -47,15 +47,7 @@ export default function MapComponent({
           position: 'RB'
         }));
         map.addControl(new AMap.Scale());
-        map.addControl(new AMap.HawkEye());
-        map.addControl(new AMap.ControlBar({
-          showZoomBar: true,
-          showControlButton: true,
-          position: {
-            right: '10px',
-            top: '10px'
-          }
-        }));
+
 
         // 添加标记点
         new AMap.Marker({

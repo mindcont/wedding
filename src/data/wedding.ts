@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 // 本地图片资源路径
-const localImagePath = (filename: string) =>
-  `/src/data/img/${filename}`;
+const localImagePath = (filename: string) => 
+  `/assets/img/${filename}`;
 
 export const weddingData = {
   coupleName: "张正轩 & 李梦",
@@ -27,12 +27,12 @@ export const weddingData = {
   galleryPhotos: [
     {
       id: "1",
-      url: localImagePath( 'erduo.jpg'),
+      url: localImagePath('erduo.jpg'),
       alt: "海边日落婚纱照"
     },
     {
       id: "2",
-      url: localImagePath( 'european_architecture.webp'),
+      url: localImagePath('european_architecture.webp'),
       alt: "欧式建筑婚纱照"
     },
     {
@@ -227,9 +227,6 @@ export const weddingData = {
       );
       try {
         console.log('开始执行总访问量查询...');
-
-
-
         // 方案2: 精确计数
         const { data, error: altError } = await supabase
           .from('visitors')
@@ -240,21 +237,6 @@ export const weddingData = {
           return data?.length || 0;
         }
         console.error('方案2失败:', altError);
-
-        // 方案3: 使用rpc函数计数
-        try {
-          const { data, error: rpcError } = await supabase
-            .rpc('count_visitors');
-
-          if (!rpcError && data) {
-            console.log('方案3查询成功，返回:', data);
-            return data;
-          }
-          console.error('方案3失败:', rpcError);
-        } catch (rpcErr) {
-          console.error('方案3异常:', rpcErr);
-        }
-
         // 所有方案都失败时返回0
         return 0;
       } catch (err) {
