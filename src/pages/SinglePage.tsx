@@ -177,7 +177,7 @@ export default function SinglePage() {
             aspectRatio: "3/4"
           }}
         >
-          <div className="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-50 rounded-lg">
+          <div className="flex flex-col items-center justify-center w-full h-full  bg-opacity-50 rounded-lg">
             <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ fontFamily: "'Great Vibes', cursive", color: 'white' }}>
               {weddingData.coupleName}
             </h1>
