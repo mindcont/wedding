@@ -28,53 +28,48 @@ export const weddingData = {
   galleryPhotos: [
     {
       id: "1",
-      url: localImagePath('1.webp'),
+      url: localImagePath('21.webp'),
       alt: "海边日落婚纱照"
     },
     {
       id: "2",
-      url: localImagePath('2.webp'),
+      url: localImagePath('22.webp'),
       alt: "欧式建筑婚纱照"
     },
     {
       id: "3",
-      url: localImagePath('3.webp'),
+      url: localImagePath('23.webp'),
       alt: "森林主题婚纱照"
     },
     {
       id: "4",
-      url: localImagePath('4.webp'),
+      url: localImagePath('24.webp'),
       alt: "城市夜景婚纱照"
     },
     {
       id: "5",
-      url: localImagePath('5.webp'),
+      url: localImagePath('25.webp'),
       alt: "中式传统婚纱照"
     },
     {
       id: "6",
-      url: localImagePath('6.webp'),
+      url: localImagePath('26.webp'),
       alt: "创意气球婚纱照"
     },
     {
       id: "7",
-      url: localImagePath('7.webp'),
+      url: localImagePath('27.webp'),
       alt: "浪漫花海婚纱照"
     },
     {
       id: "8",
-      url: localImagePath('8.webp'),
+      url: localImagePath('28.webp'),
       alt: "梦幻星空婚纱照"
     },
     {
       id: "9",
-      url: localImagePath('9.webp'),
+      url: localImagePath('29.webp'),
       alt: "经典黑白婚纱照"
-    },
-    {
-      id: "10",
-      url: localImagePath('10.webp'),
-      alt: "甜美粉色婚纱照"
     }
   ],
   guestMessages: [
