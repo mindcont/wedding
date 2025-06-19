@@ -6,20 +6,24 @@
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist",
-        "outputDirectory": "dist"
+        "outputDirectory": "dist/static"
       }
     }
   ],
   "routes": [
     {
-      "src": "/assets/(.*)",
+      "src": "/_next/static/(.*)",
+      "dest": "/static/_next/static/$1"
+    },
+    {
+      "src": "/static/(.*)",
       "headers": {
         "Cache-Control": "public, max-age=31536000, immutable"
       }
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html",
+      "dest": "/static/index.html",
       "headers": {
         "Cache-Control": "public, max-age=0, must-revalidate"
       }
