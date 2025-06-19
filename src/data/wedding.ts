@@ -27,7 +27,7 @@ export const weddingData = {
   galleryPhotos: [
     {
       id: "1",
-      url: localImagePath('erduo.webp'),
+      url: localImagePath('erduo.jpg'),
       alt: "海边日落婚纱照"
     },
     {
