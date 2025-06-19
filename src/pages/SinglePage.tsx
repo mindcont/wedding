@@ -166,54 +166,37 @@ export default function SinglePage() {
   );
 
   // 首页内容
-  const HomeSection = ({ weddingData, scrollToSection }) => {
-    return (
-      <section id="home" className="min-h-screen flex flex-col items-center justify-between p-4 md:p-8 pt-20 md:pt-24 bg-gradient-to-b from-pink-50 to-white">
-        {/* 主图容器 */}
-        <div className="flex-1 w-full max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="w-full h-full bg-cover bg-center rounded-xl md:rounded-2xl overflow-hidden"
-            style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${weddingData.featuredPhoto.url})`,
-              aspectRatio: "3/4",
-              boxShadow: "none" // 明确去除阴影
-            }}
-          >
-            {/* 内容区域 */}
-            <div className="flex flex-col items-center justify-center w-full h-full p-4 md:p-8">
-              <h1 className="text-4xl md:text-7xl font-bold mb-4 md:mb-6 text-white drop-shadow-md">
-                {weddingData.coupleName}
-              </h1>
-              <p className="text-lg md:text-3xl mt-2 md:mt-4 text-white font-light">
-                {weddingData.weddingDate}
-              </p>
-              <p className="text-base md:text-xl mt-4 px-3 py-1 md:px-4 md:py-2 bg-white/20 backdrop-blur-sm rounded-full">
-                菏泽市郓城县·丽都大酒店
-              </p>
-            </div>
-          </motion.div>
-        </div>
+  const renderHomeSection = () => (
+    <section id="home" className="min-h-screen flex flex-col items-center justify-between p-8 pt-24">
 
-        {/* 按钮区域 - 响应式调整 */}
-        <div className="w-full max-w-xs md:max-w-md mb-4 md:mb-8 space-y-3 md:space-y-4">
-          {weddingData.navItems.map((item) => (
-            <motion.button
-              key={item.name}
-              className="w-full bg-gradient-to-r from-pink-400 to-pink-600 text-white text-sm md:text-base py-3 md:py-4 px-4 md:px-6 rounded-full"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => scrollToSection(item.target)}
-            >
-              {item.name}
-            </motion.button>
-          ))}
-        </div>
-      </section>
-    )
-  }
+      <div className="flex flex-col items-center justify-center w-full h-full  bg-opacity-50 rounded-lg">
+        <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ fontFamily: "'Great Vibes', cursive", color: 'white' }}>
+          {weddingData.coupleName}
+        </h1>
+        <p className="text-xl md:text-2xl mt-4" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300, color: 'white' }}>
+          {weddingData.weddingDate}
+        </p>
+        <p className="text-lg md:text-xl mt-2" style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 300, color: 'white' }}>
+          {'{菏泽市郓城县.丽都大酒店}  热烈欢迎您的到来，见证我们的幸福时刻！'}
+        </p>
+      </div>
+      <div className="w-full max-w-md mb-8">
+        {weddingData.navItems.map((item) => (
+          <motion.button
+            key={item.name}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => scrollToSection(item.name === '婚纱照' ? 'gallery' : item.name === '请柬' ? 'invitation' : 'wishes')}
+            className="w-full bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 font-medium py-4 px-6 rounded-lg shadow-md mb-4 transition-all duration-300"
+          >
+            {item.name}
+          </motion.button>
+        ))}
+      </div>
+
+
+    </section>
+  );
 
   // 相册内容
   const renderGallerySection = () => (
