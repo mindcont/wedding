@@ -168,6 +168,21 @@ export default function SinglePage() {
   // 首页内容
   const renderHomeSection = () => (
     <section id="home" className="min-h-screen flex flex-col items-center justify-between p-8 pt-24">
+        <div className="mt-8">
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="overflow-hidden rounded-lg shadow-md"
+            >
+              <img
+                src={weddingData.featuredPhoto.url}
+                alt={weddingData.featuredPhoto.alt}
+                className="w-full h-auto object-cover rounded-lg"
+                style={{ aspectRatio: "3/4" }}
+              />
+            </motion.div>
+            <p className="mt-4 text-gray-600">张明 & 李雪</p>
+          </div>
+          
       <div className="flex-1 flex flex-col items-center justify-center text-center">
         <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ fontFamily: "'Great Vibes', cursive" }}>
           {weddingData.coupleName}

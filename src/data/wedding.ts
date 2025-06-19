@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 // 本地图片资源路径
-const localImagePath = (filename: string) => 
+const localImagePath = (filename: string) =>
   `/assets/img/${filename}`;
 
 export const weddingData = {
@@ -16,7 +16,7 @@ export const weddingData = {
     lat: 36.06623,
     lng: 120.384428,
     marker: {
-      icon: localImagePath('maker.png')
+      icon: localImagePath('maker2.png')
     }
   },
   navItems: [
@@ -328,7 +328,7 @@ export const weddingData = {
     key: import.meta.env.VITE_AMAP_KEY || "您的高德地图key",
     version: "2.0",
     plugins: ["AMap.Scale", "AMap.ToolBar", "AMap.HawkEye", "AMap.ControlBar"],
-    center: [120.384428, 36.06623], // 青岛瑞吉酒店坐标
+    center: [115.93413676285013, 35.610928105788716], // 青岛瑞吉酒店坐标
     zoom: 15,
     minZoom: 10,
     maxZoom: 18
