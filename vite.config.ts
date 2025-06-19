@@ -13,18 +13,21 @@ function getImages() {
   const imagesDir = path.resolve(__dirname, 'src/assets/img');
   const files = fs.readdirSync(imagesDir);
   
-  // 过滤出图片文件，并生成导入路径
+  // 过滤出图片文件，并生成相对路径
   return files
     .filter(file => /\.(png|jpe?g|gif|svg)$/.test(file)) // 根据需要添加其他扩展名
-    .map(file => {
-      const imagePath = path.join(imagesDir, file);
-      return `import ${file.replace(/\.[^/.]+$/, "")} from '${imagePath}';`;
-    })
-    .join('\n');
+    .map(file => `/src/assets/img/${file}`); // 返回相对路径
 }
 
-// 生成图片导入语句
-const imagesImports = getImages();
+// 生成图片路径数组
+const imagesPaths = getImages();
+
+// 将图片路径转换为全局变量
+const imagesImports = imagesPaths.reduce((acc, path) => {
+  const fileName = path.split('/').pop(); // 获取文件名
+  acc[fileName] = path; // 将文件名作为键，路径作为值
+  return acc;
+}, {});
 
 function getPlugins() {
   const plugins = [react(), tsconfigPaths()];
@@ -37,7 +40,7 @@ export default defineConfig({
     ...getPlugins(), // 使用扩展运算符将 getPlugins() 返回的插件数组展开
   ],
   define: {
-    // 将导入的图片路径注入到全局变量中
-    __IMAGES__: imagesImports,
+  // 将图片路径数组注入到全局变量中
+    __IMAGES__: JSON.stringify(imagesPaths),
   },
 });
