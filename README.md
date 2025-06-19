@@ -29,3 +29,19 @@ pnpm run dev
 
 - 在浏览器访问 http://localhost:3000
 
+## 🚀 部署
+
+### 1. Set runtime environment
+
+[Create a supabase project](https://supabase.io/docs/guides/with-nextjs) and add `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` /`VITE_AMAP_KEY` environment variables to the next.js project.
+
+### 2. Edit Contents
+
+- Update `public/assets/data/wedding.ts` with your information.
+- Add your contents image to `public/img`
+
+### 3. Publish with Vercel
+
+Deploy your wedding log using [Vercel](https://vercel.com/):
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/mindcont/wedding)
