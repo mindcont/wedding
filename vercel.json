@@ -1,3 +1,4 @@
+
 {
   "version": 2,
   "builds": [
@@ -11,6 +12,13 @@
     }
   ],
   "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/static/assets/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000"
+      }
+    },
     {
       "src": "/_next/static/(.*)",
       "dest": "/static/_next/static/$1"
